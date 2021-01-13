@@ -15,7 +15,7 @@ class Impersonate
      */
     public function handle($request, Closure $next)
     {
-        if ($request->session()->has('impersonate') && backpack_user()->hasRole('superadmin')) {
+        if ($request->session()->has('impersonate') && backpack_user()->hasRole('Admin')) {
             backpack_auth()->onceUsingId($request->session()->get('impersonate'));
         }
 

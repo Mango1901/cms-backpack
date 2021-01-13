@@ -18,11 +18,16 @@ trait ImpersonateOperation
      */
     protected function setupImpersonateRoutes($segment, $routeName, $controller)
     {
-        Route::get($segment.'/{id}/impersonate', [
-            'as'        => $routeName.'.impersonate',
-            'uses'      => $controller.'@impersonate',
-            'operation' => 'impersonate',
-        ]);
+            Route::get($segment.'/{id}/impersonate', [
+                'as'        => $routeName.'.impersonate',
+                'uses'      => $controller.'@impersonate',
+                'operation' => 'impersonate',
+            ]);
+        Route::get('stop-impersonating', function() {
+            backpack_user()->stopImpersonating();
+            \Alert::success('Impersonating stopped.')->flash();
+            return redirect()->back();
+        });
     }
 
     /**
@@ -30,8 +35,9 @@ trait ImpersonateOperation
      */
     protected function setupImpersonateDefaults()
     {
-        $this->crud->allowAccess('impersonate');
-
+        if(backpack_user()->hasRole("Admin")){
+            $this->crud->allowAccess('impersonate');
+        }
         $this->crud->operation('impersonate', function () {
             $this->crud->loadDefaultOperationSettingsFromConfig();
         });

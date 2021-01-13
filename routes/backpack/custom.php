@@ -10,15 +10,11 @@ Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => array_merge(
         (array) config('backpack.base.web_middleware', 'web'),
-        (array) config('backpack.base.middleware_key', 'admin')
+        (array) config('backpack.base.middleware_key', 'admin'),
+        ['web', backpack_middleware()]
     ),
     'namespace'  => 'App\Http\Controllers',
 ], function () { // custom admin routes
-    Route::get('stop-impersonating', function() {
-        backpack_user()->stopImpersonating();
-        \Alert::success('Impersonating stopped.')->flash();
-        return redirect()->back();
-    });
     Route::crud('permission', 'PermissionCrudController');
     Route::crud('role', 'RoleCrudController');
     Route::crud('user', 'UserCrudController');
