@@ -16,5 +16,5 @@ Route::group([
 ], function () {
     Route::crud('permission', 'PermissionCrudController');
     Route::crud('role', 'RoleCrudController');
-    Route::crud('user', 'UserCrudController');
+//    Route::crud('user', 'UserCrudController');
 });

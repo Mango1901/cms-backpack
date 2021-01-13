@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Route;
 // --------------------------
 // Custom Backpack Routes
 // --------------------------
@@ -14,6 +14,11 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers',
 ], function () { // custom admin routes
+    Route::get('stop-impersonating', function() {
+        backpack_user()->stopImpersonating();
+        \Alert::success('Impersonating stopped.')->flash();
+        return redirect()->back();
+    });
     Route::crud('permission', 'PermissionCrudController');
     Route::crud('role', 'RoleCrudController');
     Route::crud('user', 'UserCrudController');

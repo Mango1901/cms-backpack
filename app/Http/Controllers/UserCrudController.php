@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Admin\Operations\ImpersonateOperation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\UserStoreCrudRequest as StoreRequest;
 use App\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
@@ -20,7 +21,6 @@ class UserCrudController extends CrudController
         $this->crud->setEntityNameStrings(trans('backpack::permissionmanager.user'), trans('backpack::permissionmanager.users'));
         $this->crud->setRoute(backpack_url('user'));
     }
-
     public function setupListOperation()
     {
         $this->crud->addColumns([
@@ -82,7 +82,7 @@ class UserCrudController extends CrudController
             }
         );
     }
-
+    use ImpersonateOperation;
     public function setupCreateOperation()
     {
         $this->addUserFields();
