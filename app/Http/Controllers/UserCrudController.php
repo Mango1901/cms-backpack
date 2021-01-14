@@ -6,7 +6,11 @@ use App\Http\Controllers\Admin\Operations\ImpersonateOperation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\UserStoreCrudRequest as StoreRequest;
 use App\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
+use Backpack\CRUD\app\Library\CrudPanel\CrudButton;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 class UserCrudController extends CrudController
 {
@@ -14,15 +18,23 @@ class UserCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-
+    use ImpersonateOperation;
     public function setup()
     {
         $this->crud->setModel(config('backpack.permissionmanager.models.user'));
         $this->crud->setEntityNameStrings(trans('backpack::permissionmanager.user'), trans('backpack::permissionmanager.users'));
         $this->crud->setRoute(backpack_url('user'));
+        if(!backpack_user()->hasRole("Admin")){
+            $this->crud->denyAccess("create");
+            $this->crud->denyAccess("delete");
+        }
     }
     public function setupListOperation()
     {
+        $this->crud->removeButton("update");
+        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.User.edit',"beginning");
+        $this->crud->removeButton("delete");
+        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.User.delete');
         $this->crud->addColumns([
             [
                 'name'  => 'name',
@@ -66,7 +78,6 @@ class UserCrudController extends CrudController
                 });
             }
         );
-
         // Extra Permission Filter
         $this->crud->addFilter(
             [
@@ -82,7 +93,6 @@ class UserCrudController extends CrudController
             }
         );
     }
-    use ImpersonateOperation;
     public function setupCreateOperation()
     {
         $this->addUserFields();
@@ -91,8 +101,13 @@ class UserCrudController extends CrudController
 
     public function setupUpdateOperation()
     {
-        $this->addUserFields();
-        $this->crud->setValidation(UpdateRequest::class);
+        $user = User::where("id",$this->crud->getCurrentEntryId())->first();
+        if(backpack_user()->can("update",$user)) {
+            $this->addUserFields();
+            $this->crud->setValidation(UpdateRequest::class);
+        }else{
+            abort(403);
+        }
     }
 
     /**
@@ -114,11 +129,16 @@ class UserCrudController extends CrudController
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update()
+    public function update($id)
     {
+        $user = User::where("id",$id)->first();
+       if(!Auth::user()->can("update",$user)){
+           abort(403);
+       }
         $this->crud->setRequest($this->crud->validateRequest());
         $this->crud->setRequest($this->handlePasswordInput($this->crud->getRequest()));
         $this->crud->unsetValidation(); // validation has already been run
+
 
         return $this->traitUpdate();
     }
