@@ -221,4 +221,10 @@ class UserCrudController extends CrudController
         }
 
     }
+    public function destroy($id)
+    {
+        $this->crud->hasAccessOrFail('delete');
+
+        return $this->crud->delete($id);
+    }
 }
