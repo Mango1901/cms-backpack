@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\NewsCRUD\app\Http\Requests\TagRequest;
