@@ -25,14 +25,11 @@ class PermissionCrudController extends CrudController
         $this->crud->setRoute(backpack_url('permission'));
 
         // deny access according to configuration file
-        if (config('backpack.permissionmanager.allow_permission_create') == false) {
-            $this->crud->denyAccess('create');
-        }
-        if (config('backpack.permissionmanager.allow_permission_update') == false) {
-            $this->crud->denyAccess('update');
-        }
-        if (config('backpack.permissionmanager.allow_permission_delete') == false) {
-            $this->crud->denyAccess('delete');
+        if(!backpack_user()->hasRole("Admin")){
+            $this->crud->denyAccess("create");
+            $this->crud->denyAccess("update");
+            $this->crud->denyAccess("delete");
+            $this->crud->denyAccess("list");
         }
     }
 

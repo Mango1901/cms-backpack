@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\RoleStoreCrudRequest as StoreRequest;
 use App\Http\Requests\RoleUpdateCrudRequest as UpdateRequest;
@@ -25,14 +26,11 @@ class RoleCrudController extends CrudController
         $this->crud->setRoute(backpack_url('role'));
 
         // deny access according to configuration file
-        if (config('backpack.permissionmanager.allow_role_create') == false) {
-            $this->crud->denyAccess('create');
-        }
-        if (config('backpack.permissionmanager.allow_role_update') == false) {
-            $this->crud->denyAccess('update');
-        }
-        if (config('backpack.permissionmanager.allow_role_delete') == false) {
-            $this->crud->denyAccess('delete');
+        if(!backpack_user()->hasRole("Admin")){
+            $this->crud->denyAccess("create");
+            $this->crud->denyAccess("update");
+            $this->crud->denyAccess("delete");
+            $this->crud->denyAccess("list");
         }
     }
 
@@ -106,13 +104,11 @@ class RoleCrudController extends CrudController
 
     public function setupUpdateOperation()
     {
-        $this->addFields();
-        $this->crud->setValidation(UpdateRequest::class);
-
+            $this->addFields();
+            $this->crud->setValidation(UpdateRequest::class);
         //otherwise, changes won't have effect
         \Cache::forget('spatie.permission.cache');
     }
-
     private function addFields()
     {
         $this->crud->addField([
