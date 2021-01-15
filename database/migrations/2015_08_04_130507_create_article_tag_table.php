@@ -20,6 +20,7 @@ class CreateArticleTagTable extends Migration
             $table->nullableTimestamps();
             $table->softDeletes();
         });
+
     }
 
     /**

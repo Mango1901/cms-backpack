@@ -186,7 +186,10 @@ class UserCrudController extends CrudController
                 'label' => trans('backpack::permissionmanager.password_confirmation'),
                 'type'  => 'password',
             ],
-            [
+
+        ]);
+        if(backpack_user()->hasRole("Admin")){
+            $this->crud->addFields([
                 // two interconnected entities
                 'label'             => trans('backpack::permissionmanager.user_role_permission'),
                 'field_unique_name' => 'user_role_permission',
@@ -213,8 +216,9 @@ class UserCrudController extends CrudController
                         'pivot'          => true, // on create&update, do you need to add/delete pivot table entries?]
                         'number_columns' => 3, //can be 1,2,3,4,6
                     ],
-                ],
-            ],
-        ]);
+                    ],
+            ]);
+        }
+
     }
 }

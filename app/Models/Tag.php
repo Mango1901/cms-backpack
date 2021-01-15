@@ -22,7 +22,7 @@ class Tag extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     // protected $guarded = ['id'];
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ["user_id",'name', 'slug'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -55,6 +55,9 @@ class Tag extends Model
     public function articles()
     {
         return $this->belongsToMany('Backpack\NewsCRUD\app\Models\Article', 'article_tag');
+    }
+    public function User(){
+        return $this->belongsTo(User::class,"user_id","id");
     }
 
     /*

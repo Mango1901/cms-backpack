@@ -18,9 +18,13 @@ class CategoryCrudController extends CrudController
 
     public function setup()
     {
-        CRUD::setModel("Backpack\NewsCRUD\app\Models\Category");
+        CRUD::setModel("App\Models\Category");
         CRUD::setRoute(config('backpack.base.route_prefix', 'admin').'/category');
         CRUD::setEntityNameStrings('category', 'categories');
+        if(backpack_user()->hasRole("Admin")){
+            $this->crud->denyAccess("update");
+            $this->crud->denyAccess("delete");
+        }
     }
 
     protected function setupListOperation()
@@ -39,7 +43,6 @@ class CategoryCrudController extends CrudController
             ],
         ]);
     }
-
     protected function setupShowOperation()
     {
         $this->setupListOperation();
@@ -52,6 +55,12 @@ class CategoryCrudController extends CrudController
     {
         CRUD::setValidation(CategoryRequest::class);
 
+        CRUD::addField([
+            "label"=>"User",
+            "name"=>"user_id",
+            "type"=>"hidden",
+            "default"=>backpack_user()->id
+        ]);
         CRUD::addField([
             'name' => 'name',
             'label' => 'Name',
@@ -70,6 +79,7 @@ class CategoryCrudController extends CrudController
             'entity' => 'parent',
             'attribute' => 'name',
         ]);
+
     }
 
     protected function setupUpdateOperation()
