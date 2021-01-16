@@ -13,8 +13,8 @@ return [
 
     'models' => [
         'user'       => App\Models\User::class,
-        'permission' => App\Models\Permission::class,
-        'role'       => App\Models\Role::class,
+        'permission' =>  App\Models\Permission::class,
+        'role'       =>  App\Models\Role::class,
     ],
 
     /*

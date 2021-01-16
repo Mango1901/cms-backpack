@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\Operations\ImpersonateOperation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\UserStoreCrudRequest as StoreRequest;
 use App\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
-use Backpack\CRUD\app\Library\CrudPanel\CrudButton;
+use App\Http\Controllers\Admin\Operations\ImpersonateOperation;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
 
 class UserCrudController extends CrudController
 {
@@ -19,6 +16,7 @@ class UserCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use ImpersonateOperation;
+
     public function setup()
     {
         $this->crud->setModel(config('backpack.permissionmanager.models.user'));
@@ -29,6 +27,7 @@ class UserCrudController extends CrudController
             $this->crud->denyAccess("delete");
         }
     }
+
     public function setupListOperation()
     {
         $this->crud->removeButton("update");
@@ -78,6 +77,7 @@ class UserCrudController extends CrudController
                 });
             }
         );
+
         // Extra Permission Filter
         $this->crud->addFilter(
             [
@@ -93,6 +93,7 @@ class UserCrudController extends CrudController
             }
         );
     }
+
     public function setupCreateOperation()
     {
         $this->addUserFields();
@@ -129,16 +130,11 @@ class UserCrudController extends CrudController
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($id)
+    public function update()
     {
-        $user = User::where("id",$id)->first();
-       if(!Auth::user()->can("update",$user)){
-           abort(403);
-       }
         $this->crud->setRequest($this->crud->validateRequest());
         $this->crud->setRequest($this->handlePasswordInput($this->crud->getRequest()));
         $this->crud->unsetValidation(); // validation has already been run
-
 
         return $this->traitUpdate();
     }
@@ -186,45 +182,40 @@ class UserCrudController extends CrudController
                 'label' => trans('backpack::permissionmanager.password_confirmation'),
                 'type'  => 'password',
             ],
-
-        ]);
+            ]);
         if(backpack_user()->hasRole("Admin")){
             $this->crud->addFields([
-                // two interconnected entities
-                'label'             => trans('backpack::permissionmanager.user_role_permission'),
-                'field_unique_name' => 'user_role_permission',
-                'type'              => 'checklist_dependency',
-                'name'              => ['roles', 'permissions'],
-                'subfields'         => [
-                    'primary' => [
-                        'label'            => trans('backpack::permissionmanager.roles'),
-                        'name'             => 'roles', // the method that defines the relationship in your Model
-                        'entity'           => 'roles', // the method that defines the relationship in your Model
-                        'entity_secondary' => 'permissions', // the method that defines the relationship in your Model
-                        'attribute'        => 'name', // foreign key attribute that is shown to user
-                        'model'            => config('permission.models.role'), // foreign key model
-                        'pivot'            => true, // on create&update, do you need to add/delete pivot table entries?]
-                        'number_columns'   => 3, //can be 1,2,3,4,6
+                [
+                    // two interconnected entities
+                    'label'             => trans('backpack::permissionmanager.user_role_permission'),
+                    'field_unique_name' => 'user_role_permission',
+                    'type'              => 'checklist_dependency',
+                    'name'              => ['roles', 'permissions'],
+                    'subfields'         => [
+                        'primary' => [
+                            'label'            => trans('backpack::permissionmanager.roles'),
+                            'name'             => 'roles', // the method that defines the relationship in your Model
+                            'entity'           => 'roles', // the method that defines the relationship in your Model
+                            'entity_secondary' => 'permissions', // the method that defines the relationship in your Model
+                            'attribute'        => 'name', // foreign key attribute that is shown to user
+                            'model'            => config('permission.models.role'), // foreign key model
+                            'pivot'            => true, // on create&update, do you need to add/delete pivot table entries?]
+                            'number_columns'   => 3, //can be 1,2,3,4,6
+                        ],
+                        'secondary' => [
+                            'label'          => ucfirst(trans('backpack::permissionmanager.permission_singular')),
+                            'name'           => 'permissions', // the method that defines the relationship in your Model
+                            'entity'         => 'permissions', // the method that defines the relationship in your Model
+                            'entity_primary' => 'roles', // the method that defines the relationship in your Model
+                            'attribute'      => 'name', // foreign key attribute that is shown to user
+                            'model'          => config('permission.models.permission'), // foreign key model
+                            'pivot'          => true, // on create&update, do you need to add/delete pivot table entries?]
+                            'number_columns' => 3, //can be 1,2,3,4,6
+                        ],
                     ],
-                    'secondary' => [
-                        'label'          => ucfirst(trans('backpack::permissionmanager.permission_singular')),
-                        'name'           => 'permissions', // the method that defines the relationship in your Model
-                        'entity'         => 'permissions', // the method that defines the relationship in your Model
-                        'entity_primary' => 'roles', // the method that defines the relationship in your Model
-                        'attribute'      => 'name', // foreign key attribute that is shown to user
-                        'model'          => config('permission.models.permission'), // foreign key model
-                        'pivot'          => true, // on create&update, do you need to add/delete pivot table entries?]
-                        'number_columns' => 3, //can be 1,2,3,4,6
-                    ],
-                    ],
+                ],
             ]);
         }
 
-    }
-    public function destroy($id)
-    {
-        $this->crud->hasAccessOrFail('delete');
-
-        return $this->crud->delete($id);
     }
 }
