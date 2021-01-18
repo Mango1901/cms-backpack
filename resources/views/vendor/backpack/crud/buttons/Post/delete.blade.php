@@ -1,4 +1,4 @@
-@if ($crud->hasAccess('delete') && backpack_user()->can("delete",$crud->model->where("id",$entry->id)->first()))
+@if ($crud->hasAccess('delete') && backpack_user()->can("delete",$entry))
 	<a href="javascript:void(0)" onclick="deleteEntry(this)" data-route="{{ url($crud->route.'/'.$entry->getKey()) }}" class="btn btn-sm btn-link" data-button-type="delete"><i class="la la-trash"></i> {{ trans('backpack::crud.delete') }}</a>
 @endif
 

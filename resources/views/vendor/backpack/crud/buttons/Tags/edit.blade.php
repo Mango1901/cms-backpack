@@ -1,4 +1,4 @@
-@if(backpack_user()->can("update",$crud->model->where("id",$entry->id)->first()))
+@if(backpack_user()->can("update",$entry))
 <a href="{{ url($crud->route.'/'.$entry->getKey().'/edit') }} " class="btn btn-sm btn-link"><i class="la la-edit"></i>Edit</a>
 @endif
 
