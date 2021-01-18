@@ -57,21 +57,31 @@ class PostCrudController extends CrudController
             "type"=>"textarea"
         ]);
         CRUD::addColumn([
-                'name'         => 'category_id', // name of relationship method in the model
-                'type'         => 'select',
-                'label'        => 'Category',
-                'entity' => "Category",
-                'attribute' =>'name',
-                'model' => "App\Models\Category",
-        ]); // Table column heading);
-        CRUD::addColumn([
             'name'         => 'tag_id', // name of relationship method in the model
             'type'         => 'select',
             'label'        => 'Tags',
             'entity' => "Tag",
             'attribute' =>'name',
             'model' => "App\Models\Tag",
-        ]); // Table column heading);
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url('tag/'.$entry->tag_id.'/show');
+                },
+            ],
+        ]);
+        CRUD::addColumn([
+            'name'         => 'category_id', // name of relationship method in the model
+            'type'         => 'select',
+            'label'        => 'Category',
+            'entity' => "Category",
+            'attribute' =>'name',
+            'model' => "App\Models\Category",
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url('category/'.$entry->category_id.'/show');
+                },
+            ],
+        ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
 
