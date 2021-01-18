@@ -50,6 +50,11 @@ class PostCrudController extends CrudController
                 $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
         CRUD::addColumn('title');
         CRUD::addColumn([
+            "name"=>"description",
+            "label"=>"Description",
+            "type"=>"textarea"
+        ]);
+        CRUD::addColumn([
                 'name'         => 'category_id', // name of relationship method in the model
                 'type'         => 'select',
                 'label'        => 'Category',
@@ -137,6 +142,11 @@ class PostCrudController extends CrudController
             "name"=>"title",
             'type'  => 'text',
             "label"=>"title"
+        ]);
+        CRUD::addField([
+            "name"=>"description",
+            'type'  => 'ckeditor',
+            "label"=>"Description",
         ]);
         CRUD::addField([
             'label'     => "Tags",

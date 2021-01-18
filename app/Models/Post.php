@@ -11,7 +11,7 @@ class Post extends Model
     use HasFactory;
     protected $table="posts";
     protected $primaryKey = "id";
-    protected $fillable=["title","user_id","category_id","tag_id"];
+    protected $fillable=["title","user_id","category_id","tag_id","description"];
 
     public function Category(){
         return $this->belongsTo(\App\Models\Category::class,"category_id","id");
