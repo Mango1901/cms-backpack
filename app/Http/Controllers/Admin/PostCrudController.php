@@ -19,6 +19,7 @@ class PostCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -87,12 +88,23 @@ class PostCrudController extends CrudController
         $this->crud->removeButton("delete");
         $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
         CRUD::addColumn('title');
+//        $this->crud->addColumn([
+//            'label'     => "Author",
+//            'type'      => 'text',
+//            'name'      => 'users_count',
+//
+//        ]);
         CRUD::addColumn([
             "name"=>"user_id",
             'type'=> 'select',
             "label"=>"Author",
             'entity' => "User",
             'attribute' => 'name',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url('user/'.$entry->user_id.'/show');
+                },
+            ],
             'model' => "App\Models\User",
         ]);
         CRUD::addColumn([
@@ -125,15 +137,16 @@ class PostCrudController extends CrudController
     {
         CRUD::addField([
             'label'     => "Category",
-            'type'      => 'select',
+            'type'      => 'relationship',
             'name'      => 'category_id', // the db column for the foreign key
 
             // optional
             'entity'    => 'Category', // the method that defines the relationship in your Model
             'model'     => "\App\Models\Category", // foreign key model
             'attribute' => 'name', // foreign key attribute that is shown to user
-            'default'   => 2, // set the default value of the select2
-
+            'default'   => 1, // set the default value of the select2
+            'inline_create' => true,
+            'ajax' => true,
             // also optional
             'options'   => (function ($query) {
                 return $query->orderBy('id', 'ASC')->get();
@@ -151,13 +164,15 @@ class PostCrudController extends CrudController
         ]);
         CRUD::addField([
             'label'     => "Tags",
-            'type'      => 'select',
+            'type'      => 'relationship',
             'name'      => 'tag_id', // the method that defines the relationship in your Model
 
             // optional
             'entity'    => 'Tag', // the method that defines the relationship in your Model
             'model'     => "App\Models\Tag", // foreign key model
             'attribute' => 'name', // foreign key attribute that is shown to user
+            'inline_create' => true,
+            'ajax' => true,
             // 'select_all' => true, // show Select All and Clear buttons?
 
             // optional
@@ -193,4 +208,13 @@ class PostCrudController extends CrudController
         }
         $this->setupCreateOperation();
     }
+    public function fetchCategory()
+    {
+        return $this->fetch(\App\Models\Category::class);
+    }
+    public function fetchTag()
+    {
+        return $this->fetch(\App\Models\Tag::class);
+    }
+
 }

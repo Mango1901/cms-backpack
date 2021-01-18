@@ -7,6 +7,7 @@ use App\Http\Requests\UserStoreCrudRequest as StoreRequest;
 use App\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
 use App\Http\Controllers\Admin\Operations\ImpersonateOperation;
 use App\Models\User;
+use Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 use Illuminate\Support\Facades\Hash;
 
 class UserCrudController extends CrudController
@@ -15,6 +16,7 @@ class UserCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use ShowOperation;
     use ImpersonateOperation;
 
     public function setup()
@@ -93,7 +95,9 @@ class UserCrudController extends CrudController
             }
         );
     }
-
+    public function setupShowOperation(){
+        $this->setupListOperation();
+    }
     public function setupCreateOperation()
     {
         $this->addUserFields();
