@@ -34,15 +34,18 @@ class TagCrudController extends CrudController
             $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.Tags.edit',"beginning");
         $this->crud->removeButton("delete");
             $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Tags.delete');
-        $this->crud->addColumn([
-            // any type of relationship
-            'name'         => 'user_id', // name of relationship method in the model
-            'type'         => 'select',
-            'label'        => 'Author', // Table column heading
-            // OPTIONAL
-            'entity'    => 'User', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            'model'     => \App\Models\User::class, // foreign key model
+        CRUD::addColumn([
+            "name"=>"user_id",
+            'type'=> 'select',
+            "label"=>"Author",
+            'entity' => "User",
+            'attribute' => 'name',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url('user/'.$entry->user_id.'/show');
+                },
+            ],
+            'model' => "App\Models\User",
         ]);
         CRUD::addColumn("name");
         CRUD::addColumn("slug");
@@ -56,6 +59,7 @@ class TagCrudController extends CrudController
         $this->crud->removeButton("delete");
         $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
         $this->setupListOperation();
+
     }
     protected function setupCreateOperation()
     {

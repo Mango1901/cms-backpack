@@ -52,6 +52,11 @@ class CategoryCrudController extends CrudController
             "label"=>"Author",
             'entity' => "User",
             'attribute' => 'name',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url('user/'.$entry->user_id.'/show');
+                },
+            ],
             'model' => "App\Models\User",
         ]);
         CRUD::addColumn('created_at');

@@ -88,12 +88,6 @@ class PostCrudController extends CrudController
         $this->crud->removeButton("delete");
         $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
         CRUD::addColumn('title');
-//        $this->crud->addColumn([
-//            'label'     => "Author",
-//            'type'      => 'text',
-//            'name'      => 'users_count',
-//
-//        ]);
         CRUD::addColumn([
             "name"=>"user_id",
             'type'=> 'select',
