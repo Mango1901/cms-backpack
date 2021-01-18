@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Category;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\NewsCRUD\app\Http\Requests\CategoryRequest;
@@ -21,32 +22,38 @@ class CategoryCrudController extends CrudController
         CRUD::setModel("App\Models\Category");
         CRUD::setRoute(config('backpack.base.route_prefix', 'admin').'/category');
         CRUD::setEntityNameStrings('category', 'categories');
-        if(backpack_user()->hasRole("Admin")){
-            $this->crud->denyAccess("update");
+        if(backpack_user()->hasRole("User")){
+            $this->crud->denyAccess("create");
+            $this->crud->denyAccess("Update");
             $this->crud->denyAccess("delete");
         }
     }
 
     protected function setupListOperation()
     {
+        $this->crud->removeButton("update");
+             $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.Category.edit',"beginning");
+        $this->crud->removeButton("delete");
+             $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Category.delete');
         CRUD::addColumn('name');
         CRUD::addColumn('slug');
         CRUD::addColumn('parent');
-        CRUD::addColumn([   // select_multiple: n-n relationship (with pivot table)
-            'label'     => 'Articles', // Table column heading
-            'type'      => 'relationship_count',
-            'name'      => 'articles', // the method that defines the relationship in your Model
-            'wrapper'   => [
-                'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url('article?category_id='.$entry->getKey());
-                },
-            ],
-        ]);
     }
     protected function setupShowOperation()
     {
+        $this->crud->removeButton("update");
+        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.Post.edit',"beginning");
+        $this->crud->removeButton("delete");
+        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
         $this->setupListOperation();
-
+        CRUD::addColumn([
+            "name"=>"user_id",
+            'type'=> 'select',
+            "label"=>"Author",
+            'entity' => "User",
+            'attribute' => 'name',
+            'model' => "App\Models\User",
+        ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
     }
@@ -84,6 +91,10 @@ class CategoryCrudController extends CrudController
 
     protected function setupUpdateOperation()
     {
+        $category = Category::where("id",$this->crud->getCurrentEntryId())->first();
+        if(!backpack_user()->can("update",$category)){
+            abort(403);
+        }
         $this->setupCreateOperation();
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Post;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -43,15 +44,11 @@ class PostCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->removeButton("update");
+                $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.Post.edit',"beginning");
+        $this->crud->removeButton("delete");
+                $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
         CRUD::addColumn('title');
-        CRUD::addColumn([
-            "name"=>"user_id",
-            'type'=> 'select',
-            "label"=>"Author",
-            'entity' => "User",
-            'attribute' => 'name',
-            'model' => "App\Models\User",
-        ]);
         CRUD::addColumn([
                 'name'         => 'category_id', // name of relationship method in the model
                 'type'         => 'select',
@@ -79,6 +76,10 @@ class PostCrudController extends CrudController
          */
     }
     public function setupShowOperation(){
+        $this->crud->removeButton("update");
+        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.Post.edit',"beginning");
+        $this->crud->removeButton("delete");
+        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
         CRUD::addColumn('title');
         CRUD::addColumn([
             "name"=>"user_id",
@@ -175,6 +176,10 @@ class PostCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $post = Post::where("id",$this->crud->getCurrentEntryId())->first();
+        if(!backpack_user()->can("update",$post)){
+            abort(403);
+        }
         $this->setupCreateOperation();
     }
 }

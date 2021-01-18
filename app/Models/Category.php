@@ -66,6 +66,10 @@ class Category extends Model
     {
         return $this->hasMany('Backpack\NewsCRUD\app\Models\Article');
     }
+    public function User(){
+        return $this->belongsTo(User::class,"user_id","id");
+
+}
 
     /*
     |--------------------------------------------------------------------------

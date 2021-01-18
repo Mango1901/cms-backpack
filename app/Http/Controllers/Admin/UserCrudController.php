@@ -216,6 +216,15 @@ class UserCrudController extends CrudController
                 ],
             ]);
         }
+    }
+    public function destroy($id)
+    {
+        $user = User::find($id);
+        if(!backpack_user()->can("delete",$user)){
+            abort(403);
+        }
+        $this->crud->hasAccessOrFail('delete');
 
+        return $this->crud->delete($id);
     }
 }
