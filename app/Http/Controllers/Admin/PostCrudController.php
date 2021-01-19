@@ -57,6 +57,32 @@ class PostCrudController extends CrudController
             "type"=>"textarea"
         ]);
         CRUD::addColumn([
+            "name"=>"excerpt",
+            "label"=>"Excerpt",
+            "type"=>"text"
+        ]);
+        CRUD::addColumn([
+            "name"=>"url",
+            "label"=>"Send TrackBacks",
+            "type"=>"text",
+            'href' => function ($crud, $column, $entry, $related_key) {
+                return ($entry->url);
+            },
+        ]);
+        CRUD::addColumn([
+            'name'         => 'format_id', // name of relationship method in the model
+            'type'         => 'select',
+            'label'        => 'Format',
+            'entity' => "Format",
+            'attribute' =>'name',
+            'model' => "App\Models\Format",
+        ]);
+        $this->crud->addColumn([
+            'name' => 'image', // The db column name
+            'label' => "Post Image", // Table column heading
+            'type' => 'image',
+        ]);
+        CRUD::addColumn([
             'name'         => 'tag_id', // name of relationship method in the model
             'type'         => 'select',
             'label'        => 'Tags',
@@ -81,6 +107,11 @@ class PostCrudController extends CrudController
                     return backpack_url('category/'.$entry->category_id.'/show');
                 },
             ],
+        ]);
+        CRUD::addColumn([
+            'label'     => 'Status',
+            'name'  => 'status',
+            'type'  => 'text',
         ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
@@ -137,6 +168,19 @@ class PostCrudController extends CrudController
                 },
             ],
         ]);
+        CRUD::addColumn([
+            'name'         => 'format_id', // name of relationship method in the model
+            'type'         => 'select',
+            'label'        => 'Format',
+            'entity' => "Format",
+            'attribute' =>'name',
+            'model' => "App\Models\Format",
+        ]);
+        $this->crud->addColumn([
+            'name' => 'image', // The db column name
+            'label' => "Post Image", // Table column heading
+            'type' => 'image',
+        ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
 
@@ -149,22 +193,60 @@ class PostCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::addField([
-            'label'     => "Category",
-            'type'      => 'relationship',
-            'name'      => 'category_id', // the db column for the foreign key
+        $this->crud->addFields([
+                [
+                    'label'     => "Category",
+                    'type'      => 'relationship',
+                    'name'      => 'category_id', // the db column for the foreign key
 
-            // optional
-            'entity'    => 'Category', // the method that defines the relationship in your Model
-            'model'     => "\App\Models\Category", // foreign key model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            'default'   => 1, // set the default value of the select2
-            'inline_create' => true,
-            'ajax' => true,
-            // also optional
-            'options'   => (function ($query) {
-                return $query->orderBy('id', 'ASC')->get();
-            }),
+                    // optional
+                    'entity'    => 'Category', // the method that defines the relationship in your Model
+                    'model'     => "\App\Models\Category", // foreign key model
+                    'attribute' => 'name', // foreign key attribute that is shown to user
+                    'default'   => 1, // set the default value of the select2
+                    'inline_create' => true,
+                    'ajax' => true,
+                    // also optional
+                    'options'   => (function ($query) {
+                        return $query->orderBy('id', 'ASC')->get();
+                    }),
+                    'wrapper' => ['class' => 'form-group col-md-4'],
+                ],
+                [
+                    'label'     => "Format",
+                    'type'      => 'select',
+                    'name'      => 'format_id', // the db column for the foreign key
+
+                    // optional
+                    'entity'    => 'Format', // the method that defines the relationship in your Model
+                    'model'     => "\App\Models\Format", // foreign key model
+                    'attribute' => 'name', // foreign key attribute that is shown to user
+                    'default'   => 1, // set the default value of the select2
+                    // also optional
+                    'options'   => (function ($query) {
+                        return $query->orderBy('id', 'ASC')->get();
+                    }),
+                    'wrapper' => ['class' => 'form-group col-md-4'],
+                ],
+                [
+                    'label'     => "Tags",
+                    'type'      => 'relationship',
+                    'name'      => 'tag_id', // the method that defines the relationship in your Model
+
+                    // optional
+                    'entity'    => 'Tag', // the method that defines the relationship in your Model
+                    'model'     => "App\Models\Tag", // foreign key model
+                    'attribute' => 'name', // foreign key attribute that is shown to user
+                    'inline_create' => true,
+                    'ajax' => true,
+                    // 'select_all' => true, // show Select All and Clear buttons?
+
+                    // optional
+                    'options'   => (function ($query) {
+                        return $query->orderBy('id', 'ASC')->get();
+                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                    'wrapper' => ['class' => 'form-group col-md-4'],
+                ],
         ]);
         CRUD::addField([
             "name"=>"title",
@@ -172,28 +254,36 @@ class PostCrudController extends CrudController
             "label"=>"title"
         ]);
         CRUD::addField([
+            "name"=>"excerpt",
+            'type'  => 'text',
+            "label"=>"Excerpt"
+        ]);
+        CRUD::addField([
+            "name"=>"url",
+            'type'  => 'text',
+            "label"=>"Send TrackBacks"
+        ]);
+        CRUD::addField([
             "name"=>"description",
             'type'  => 'ckeditor',
             "label"=>"Description",
         ]);
-        CRUD::addField([
-            'label'     => "Tags",
-            'type'      => 'relationship',
-            'name'      => 'tag_id', // the method that defines the relationship in your Model
-
-            // optional
-            'entity'    => 'Tag', // the method that defines the relationship in your Model
-            'model'     => "App\Models\Tag", // foreign key model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            'inline_create' => true,
-            'ajax' => true,
-            // 'select_all' => true, // show Select All and Clear buttons?
-
-            // optional
-            'options'   => (function ($query) {
-                return $query->orderBy('id', 'ASC')->get();
-            }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+        $this->crud->addField([
+            'label'        => "Post Image",
+            'name'         => "image",
+            'filename'     => "image_filename", // set to null if not needed
+            'type'         => 'image',
+            'aspect_ratio' => 1, // set to 0 to allow any aspect ratio
+            'crop'         => true, // set to true to allow cropping, false to disable
+            'src'          => NULL, // null to read straight from DB, otherwise set to model accessor function
         ]);
+        CRUD::addField([
+            'label'     => 'Published',
+            'name'  => 'status',
+            'type'  => 'checkbox',
+            "default"=>"1",
+        ]);
+
         CRUD::addField([
             "label"=>"User",
             "name"=>"user_id",
@@ -207,7 +297,6 @@ class PostCrudController extends CrudController
          * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
-
     /**
      * Define what happens when the Update operation is loaded.
      *

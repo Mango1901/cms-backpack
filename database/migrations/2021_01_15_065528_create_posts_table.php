@@ -17,9 +17,14 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string("title");
             $table->longText("description");
+            $table->text("excerpt");
+            $table->string("url");
+            $table->longText("image")->nullable();
             $table->bigInteger("user_id")->unsigned();
             $table->bigInteger("category_id")->unsigned();
             $table->bigInteger("tag_id")->unsigned();
+            $table->tinyInteger("status")->default("0");
+            $table->bigInteger("format_id")->unsigned();
             $table->timestamps();
         });
         Schema::table('posts',function (Blueprint $table){

@@ -51,7 +51,6 @@ class TagCrudController extends CrudController
         CRUD::addColumn("slug");
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
-
     }
     protected function setupShowOperation(){
         $this->crud->removeButton("update");

@@ -11,7 +11,7 @@ class Post extends Model
     use HasFactory;
     protected $table="posts";
     protected $primaryKey = "id";
-    protected $fillable=["title","user_id","category_id","tag_id","description"];
+    protected $fillable=["title","user_id","url","category_id","tag_id","description","excerpt","image","status","format_id"];
 
     public function Category()
     {
@@ -22,5 +22,8 @@ class Post extends Model
     }
     public function Tag(){
         return $this->belongsTo(Tag::class,"tag_id","id");
+    }
+    public function Format(){
+        return $this->belongsTo(Format::class,"format_id","id");
     }
 }

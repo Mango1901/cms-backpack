@@ -102,5 +102,15 @@ class DatabaseSeeder extends Seeder
             "permission_id"=>1,
             "role_id"=>1
             ]);
+        \DB::table("formats")->insert([
+            ["name"=>"Standard"],
+            ["name"=>"Aside"],
+            ["name"=>"Image"],
+            ["name"=>"Video"],
+            ["name"=>"Audio"],
+            ["name"=>"Quote"],
+            ["name"=>"Link"],
+            ["name"=>"Gallery"]
+        ]);
     }
 }
