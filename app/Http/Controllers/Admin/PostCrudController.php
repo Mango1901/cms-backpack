@@ -108,11 +108,6 @@ class PostCrudController extends CrudController
                 },
             ],
         ]);
-        CRUD::addColumn([
-            'label'     => 'Status',
-            'name'  => 'status',
-            'type'  => 'text',
-        ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
 
@@ -280,6 +275,12 @@ class PostCrudController extends CrudController
         CRUD::addField([
             'label'     => 'Published',
             'name'  => 'status',
+            'type'  => 'checkbox',
+            "default"=>"1",
+        ]);
+        CRUD::addField([
+            'label'     => 'Allow Comments',
+            'name'  => 'allow_comments',
             'type'  => 'checkbox',
             "default"=>"1",
         ]);
