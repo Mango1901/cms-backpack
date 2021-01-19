@@ -21,8 +21,6 @@ class CreatePostsTable extends Migration
             $table->string("url");
             $table->longText("image")->nullable();
             $table->bigInteger("user_id")->unsigned();
-            $table->bigInteger("category_id")->unsigned();
-            $table->bigInteger("tag_id")->unsigned();
             $table->tinyInteger("allow_comments")->default("0");
             $table->tinyInteger("status")->default("0");
             $table->bigInteger("format_id")->unsigned();

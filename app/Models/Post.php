@@ -11,17 +11,28 @@ class Post extends Model
     use HasFactory;
     protected $table="posts";
     protected $primaryKey = "id";
-    protected $fillable=["title","user_id","url","category_id","tag_id","description","excerpt","image","status","format_id","allow_comments"];
+    protected $fillable=["title","user_id","url","description","excerpt","image","status","format_id","allow_comments"];
 
-    public function Category()
+    public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsToMany(
+            Category::class,
+           PostHasCategories::class,
+            'post_id',
+            'category_id'
+        );
     }
     public function User(){
         return $this->belongsTo(User::class,"user_id","id");
     }
-    public function Tag(){
-        return $this->belongsTo(Tag::class,"tag_id","id");
+    public function tags()
+    {
+        return $this->belongsToMany(
+            Tag::class,
+            PostHasTags::class,
+            'post_id',
+            'tag_id'
+        );
     }
     public function Format(){
         return $this->belongsTo(Format::class,"format_id","id");

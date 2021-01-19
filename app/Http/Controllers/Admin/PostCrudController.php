@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Category;
 use App\Models\Post;
+use App\Models\PostHasCategories;
+use App\Models\PostHasTags;
+use App\Models\Tag;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -82,30 +86,22 @@ class PostCrudController extends CrudController
             'label' => "Post Image", // Table column heading
             'type' => 'image',
         ]);
-        CRUD::addColumn([
-            'name'         => 'tag_id', // name of relationship method in the model
-            'type'         => 'select',
-            'label'        => 'Tags',
-            'entity' => "Tag",
-            'attribute' =>'name',
-            'model' => "App\Models\Tag",
-            'wrapper'   => [
-                'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url('tag/'.$entry->tag_id.'/show');
-                },
-            ],
-        ]);
-        CRUD::addColumn([
-            'name'         => 'category_id', // name of relationship method in the model
-            'type'         => 'select',
-            'label'        => 'Category',
-            'entity' => "Category",
-            'attribute' =>'name',
-            'model' => "App\Models\Category",
-            'wrapper'   => [
-                'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url('category/'.$entry->category_id.'/show');
-                },
+        $this->crud->addColumns([
+        [ // n-n relationship (with pivot table)
+            'label'     => "Category", // Table column heading
+            'type'      => 'select_multiple',
+            'name'      => 'category', // the method that defines the relationship in your Model
+            'entity'    => 'category', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'model'     => Category::class, // foreign key model
+        ],
+            [ // n-n relationship (with pivot table)
+                'label'     => "Tags", // Table column heading
+                'type'      => 'select_multiple',
+                'name'      => 'tags', // the method that defines the relationship in your Model
+                'entity'    => 'tags', // the method that defines the relationship in your Model
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'model'     => Tag::class, // foreign key model
             ],
         ]);
         CRUD::addColumn('created_at');
@@ -137,30 +133,22 @@ class PostCrudController extends CrudController
             ],
             'model' => "App\Models\User",
         ]);
-        CRUD::addColumn([
-            'name'         => 'tag_id', // name of relationship method in the model
-            'type'         => 'select',
-            'label'        => 'Tags',
-            'entity' => "Tag",
-            'attribute' =>'name',
-            'model' => "App\Models\Tag",
-            'wrapper'   => [
-                'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url('tag/'.$entry->tag_id.'/show');
-                },
+        $this->crud->addColumns([
+            [ // n-n relationship (with pivot table)
+                'label'     => "Category", // Table column heading
+                'type'      => 'select_multiple',
+                'name'      => 'category', // the method that defines the relationship in your Model
+                'entity'    => 'category', // the method that defines the relationship in your Model
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'model'     => Category::class, // foreign key model
             ],
-        ]);
-        CRUD::addColumn([
-            'name'         => 'category_id', // name of relationship method in the model
-            'type'         => 'select',
-            'label'        => 'Category',
-            'entity' => "Category",
-            'attribute' =>'name',
-            'model' => "App\Models\Category",
-            'wrapper'   => [
-                'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url('category/'.$entry->category_id.'/show');
-                },
+            [ // n-n relationship (with pivot table)
+                'label'     => "Tags", // Table column heading
+                'type'      => 'select_multiple',
+                'name'      => 'tags', // the method that defines the relationship in your Model
+                'entity'    => 'tags', // the method that defines the relationship in your Model
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'model'     => Tag::class, // foreign key model
             ],
         ]);
         CRUD::addColumn([
@@ -191,20 +179,19 @@ class PostCrudController extends CrudController
         $this->crud->addFields([
                 [
                     'label'     => "Category",
-                    'type'      => 'relationship',
-                    'name'      => 'category_id', // the db column for the foreign key
+                    'type'      => 'select2_multiple',
+                    'name'      => 'category', // the method that defines the relationship in your Model
 
                     // optional
-                    'entity'    => 'Category', // the method that defines the relationship in your Model
-                    'model'     => "\App\Models\Category", // foreign key model
+                    'entity'    => 'category', // the method that defines the relationship in your Model
+                    'model'     => Category::class, // foreign key model
                     'attribute' => 'name', // foreign key attribute that is shown to user
-                    'default'   => 1, // set the default value of the select2
-                    'inline_create' => true,
-                    'ajax' => true,
+                    'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+
                     // also optional
                     'options'   => (function ($query) {
                         return $query->orderBy('id', 'ASC')->get();
-                    }),
+                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     'wrapper' => ['class' => 'form-group col-md-4'],
                 ],
                 [
@@ -225,18 +212,16 @@ class PostCrudController extends CrudController
                 ],
                 [
                     'label'     => "Tags",
-                    'type'      => 'relationship',
-                    'name'      => 'tag_id', // the method that defines the relationship in your Model
+                    'type'      => 'select2_multiple',
+                    'name'      => 'tags', // the method that defines the relationship in your Model
 
                     // optional
-                    'entity'    => 'Tag', // the method that defines the relationship in your Model
-                    'model'     => "App\Models\Tag", // foreign key model
+                    'entity'    => 'tags', // the method that defines the relationship in your Model
+                    'model'     => Tag::class, // foreign key model
                     'attribute' => 'name', // foreign key attribute that is shown to user
-                    'inline_create' => true,
-                    'ajax' => true,
-                    // 'select_all' => true, // show Select All and Clear buttons?
+                    'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
 
-                    // optional
+                    // also optional
                     'options'   => (function ($query) {
                         return $query->orderBy('id', 'ASC')->get();
                     }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
@@ -314,13 +299,13 @@ class PostCrudController extends CrudController
         }
         $this->setupCreateOperation();
     }
-    public function fetchCategory()
-    {
-        return $this->fetch(\App\Models\Category::class);
-    }
-    public function fetchTag()
-    {
-        return $this->fetch(\App\Models\Tag::class);
-    }
+//    public function fetchCategory()
+//    {
+//        return $this->fetch(\App\Models\Category::class);
+//    }
+//    public function fetchTag()
+//    {
+//        return $this->fetch(\App\Models\Tag::class);
+//    }
 
 }
