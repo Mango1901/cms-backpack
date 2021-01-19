@@ -87,19 +87,19 @@ class PostCrudController extends CrudController
             'type' => 'image',
         ]);
         $this->crud->addColumns([
-        [ // n-n relationship (with pivot table)
-            'label'     => "Category", // Table column heading
-            'type'      => 'select_multiple',
-            'name'      => 'category', // the method that defines the relationship in your Model
-            'entity'    => 'category', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            'model'     => Category::class, // foreign key model
-        ],
+            [ // n-n relationship (with pivot table)
+                'label'     => "Category", // Table column heading
+                'type'      => 'relationship',
+                'name'      => 'category', // the method that defines the relationship in your Model
+                'entity'    => 'category', // the method that defines the relationship in your Model
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'model'     => Category::class, // foreign key model
+            ],
             [ // n-n relationship (with pivot table)
                 'label'     => "Tags", // Table column heading
-                'type'      => 'select_multiple',
-                'name'      => 'tags', // the method that defines the relationship in your Model
-                'entity'    => 'tags', // the method that defines the relationship in your Model
+                'type'      => 'relationship',
+                'name'      => 'tag', // the method that defines the relationship in your Model
+                'entity'    => 'tag', // the method that defines the relationship in your Model
                 'attribute' => 'name', // foreign key attribute that is shown to user
                 'model'     => Tag::class, // foreign key model
             ],
@@ -136,7 +136,7 @@ class PostCrudController extends CrudController
         $this->crud->addColumns([
             [ // n-n relationship (with pivot table)
                 'label'     => "Category", // Table column heading
-                'type'      => 'select_multiple',
+                'type'      => 'relationship',
                 'name'      => 'category', // the method that defines the relationship in your Model
                 'entity'    => 'category', // the method that defines the relationship in your Model
                 'attribute' => 'name', // foreign key attribute that is shown to user
@@ -144,9 +144,9 @@ class PostCrudController extends CrudController
             ],
             [ // n-n relationship (with pivot table)
                 'label'     => "Tags", // Table column heading
-                'type'      => 'select_multiple',
-                'name'      => 'tags', // the method that defines the relationship in your Model
-                'entity'    => 'tags', // the method that defines the relationship in your Model
+                'type'      => 'relationship',
+                'name'      => 'tag', // the method that defines the relationship in your Model
+                'entity'    => 'tag', // the method that defines the relationship in your Model
                 'attribute' => 'name', // foreign key attribute that is shown to user
                 'model'     => Tag::class, // foreign key model
             ],
@@ -179,7 +179,7 @@ class PostCrudController extends CrudController
         $this->crud->addFields([
                 [
                     'label'     => "Category",
-                    'type'      => 'select2_multiple',
+                    'type'      => 'relationship',
                     'name'      => 'category', // the method that defines the relationship in your Model
 
                     // optional
@@ -187,6 +187,8 @@ class PostCrudController extends CrudController
                     'model'     => Category::class, // foreign key model
                     'attribute' => 'name', // foreign key attribute that is shown to user
                     'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+                    "inline_create"=>true,
+                    'ajax' => true,
 
                     // also optional
                     'options'   => (function ($query) {
@@ -212,14 +214,16 @@ class PostCrudController extends CrudController
                 ],
                 [
                     'label'     => "Tags",
-                    'type'      => 'select2_multiple',
-                    'name'      => 'tags', // the method that defines the relationship in your Model
+                    'type'      => 'relationship',
+                    'name'      => 'tag', // the method that defines the relationship in your Model
 
                     // optional
-                    'entity'    => 'tags', // the method that defines the relationship in your Model
+                    'entity'    => 'tag', // the method that defines the relationship in your Model
                     'model'     => Tag::class, // foreign key model
                     'attribute' => 'name', // foreign key attribute that is shown to user
                     'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+                    "inline_create"=>true,
+                    'ajax' => true,
 
                     // also optional
                     'options'   => (function ($query) {
@@ -299,13 +303,13 @@ class PostCrudController extends CrudController
         }
         $this->setupCreateOperation();
     }
-//    public function fetchCategory()
-//    {
-//        return $this->fetch(\App\Models\Category::class);
-//    }
-//    public function fetchTag()
-//    {
-//        return $this->fetch(\App\Models\Tag::class);
-//    }
+    public function fetchCategory()
+    {
+        return $this->fetch(\App\Models\Category::class);
+    }
+    public function fetchTag()
+    {
+        return $this->fetch(\App\Models\Tag::class);
+    }
 
 }
