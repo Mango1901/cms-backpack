@@ -277,12 +277,14 @@ class PostCrudController extends CrudController
             'name'  => 'status',
             'type'  => 'checkbox',
             "default"=>"1",
+            'wrapper' => ['class' => 'form-group col-md-6'],
         ]);
         CRUD::addField([
             'label'     => 'Allow Comments',
             'name'  => 'allow_comments',
             'type'  => 'checkbox',
             "default"=>"1",
+            'wrapper' => ['class' => 'form-group col-md-6'],
         ]);
 
         CRUD::addField([
