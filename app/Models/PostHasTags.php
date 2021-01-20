@@ -10,6 +10,6 @@ class PostHasTags extends Model
 {
     use HasFactory,CrudTrait;
     public $timestamps = true;
-    protected $primaryKey=["post_id","tag_id"];
+    protected $primaryKey=["tagable_id","tag_id","tagable_type"];
     protected $table="post_has_tags";
 }

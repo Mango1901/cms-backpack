@@ -14,12 +14,13 @@ class CreatePostHasTagsTable extends Migration
     public function up()
     {
         Schema::create('post_has_tags', function (Blueprint $table) {
-            $table->bigInteger("post_id");
+            $table->bigInteger("tagable_id");
+            $table->string("tagable_type");
             $table->bigInteger("tag_id")->unsigned();
             $table->timestamps();
         });
         Schema::table('post_has_tags', function (Blueprint $table) {
-            $table->primary(['post_id', 'tag_id']);
+            $table->primary(['tagable_id', 'tag_id',"tagable_type"]);
         });
     }
 

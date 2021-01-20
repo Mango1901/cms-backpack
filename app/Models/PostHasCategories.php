@@ -10,6 +10,6 @@ class PostHasCategories extends Model
 {
     use HasFactory,CrudTrait;
     public $timestamps = true;
-    protected $primaryKey=["post_id","category_id"];
+    protected $primaryKey=["able_id","category_id","able_type"];
     protected $table="post_has_categories";
 }

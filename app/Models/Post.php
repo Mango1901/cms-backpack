@@ -15,10 +15,11 @@ class Post extends Model
 
     public function category()
     {
-        return $this->belongsToMany(
+        return $this->morphToMany(
             Category::class,
-           PostHasCategories::class,
-            'post_id',
+            'able',
+            PostHasCategories::class,
+            "able_id",
             'category_id'
         );
     }
@@ -27,13 +28,23 @@ class Post extends Model
     }
     public function tag()
     {
-        return $this->belongsToMany(
+        return $this->morphToMany(
             Tag::class,
+            'tagable',
             PostHasTags::class,
-            'post_id',
+           "tagable_id",
             'tag_id'
         );
     }
+//    public function tag()
+//    {
+//        return $this->belongsToMany(
+//            Tag::class,
+//            PostHasTags::class,
+//            'post_id',
+//            'tag_id'
+//        );
+//    }
     public function Format(){
         return $this->belongsTo(Format::class,"format_id","id");
     }
