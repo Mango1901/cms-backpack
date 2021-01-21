@@ -29,7 +29,7 @@ class PostRequest extends FormRequest
               'title' => 'required|min:1|max:255',
               'description' => 'required|min:1|max:4271658',
               'excerpt' => 'required|min:1|max:1000',
-              "Send TrackBacks"=>"required|min:1|max:80"
+              "url"=>'required|min:1|max:80',
 
         ];
     }

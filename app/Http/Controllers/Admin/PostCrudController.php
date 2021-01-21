@@ -85,6 +85,10 @@ class PostCrudController extends CrudController
             'name' => 'image', // The db column name
             'label' => "Post Image", // Table column heading
             'type' => 'image',
+            "disk"         =>"uploads",
+            "upload"       =>true,
+            'height' => '150px',
+            'width'  => '130px'
         ]);
         $this->crud->addColumns([
             [ // n-n relationship (with pivot table)
@@ -160,9 +164,15 @@ class PostCrudController extends CrudController
             'model' => "App\Models\Format",
         ]);
         $this->crud->addColumn([
-            'name' => 'image', // The db column name
-            'label' => "Post Image", // Table column heading
-            'type' => 'image',
+            'name'      => 'image', // The db column name
+            'label'     => 'Post image', // Table column heading
+            'type'      => 'image',
+            // image from a different disk (like s3 bucket)
+             'disk'   => 'uploads',
+            // optional width/height if 25px is not ok with you
+             'height' => '150px',
+             'width'  => '130px'
+
         ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
@@ -257,7 +267,9 @@ class PostCrudController extends CrudController
             'label'        => "Post Image",
             'name'         => "image",
             'filename'     => "image_filename", // set to null if not needed
-            'type'         => 'image',
+            'type'         => 'upload',
+            "disk"         =>"uploads",
+            "upload"       =>true,
             'aspect_ratio' => 1, // set to 0 to allow any aspect ratio
             'crop'         => true, // set to true to allow cropping, false to disable
             'src'          => NULL, // null to read straight from DB, otherwise set to model accessor function

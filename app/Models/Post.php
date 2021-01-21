@@ -39,4 +39,18 @@ class Post extends Model
     public function Format(){
         return $this->belongsTo(Format::class,"format_id","id");
     }
+    public function setImageAttribute($value)
+    {
+        $attribute_name = "image";
+        $disk = "uploads";
+        $destination_path = "/";
+        if ($value==null) {
+            // delete the image from disk
+            \Storage::disk($disk)->delete($this->{$attribute_name});
+
+            // set null in the database column
+            $this->attributes[$attribute_name] = null;
+        }
+        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+    }
 }
