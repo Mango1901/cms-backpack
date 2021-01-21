@@ -17,9 +17,9 @@ class Post extends Model
     {
         return $this->morphToMany(
             Category::class,
-            'able',
-            PostHasCategories::class,
-            "able_id",
+            'cateable',
+            CateAble::class,
+            "cateable_id",
             'category_id'
         );
     }
@@ -30,21 +30,12 @@ class Post extends Model
     {
         return $this->morphToMany(
             Tag::class,
-            'tagable',
-            PostHasTags::class,
-           "tagable_id",
+            'taggable',
+            Taggable::class,
+           "taggable_id",
             'tag_id'
         );
     }
-//    public function tag()
-//    {
-//        return $this->belongsToMany(
-//            Tag::class,
-//            PostHasTags::class,
-//            'post_id',
-//            'tag_id'
-//        );
-//    }
     public function Format(){
         return $this->belongsTo(Format::class,"format_id","id");
     }

@@ -32,9 +32,9 @@ class CategoryCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->removeButton("update");
-             $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.Category.edit',"beginning");
+             $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->removeButton("delete");
-             $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Category.delete');
+             $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn('name');
         CRUD::addColumn('slug');
         CRUD::addColumn('parent');
@@ -42,9 +42,9 @@ class CategoryCrudController extends CrudController
     protected function setupShowOperation()
     {
         $this->crud->removeButton("update");
-        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.Post.edit',"beginning");
+        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->removeButton("delete");
-        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
+        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         $this->setupListOperation();
         CRUD::addColumn([
             "name"=>"user_id",

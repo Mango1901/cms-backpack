@@ -33,9 +33,9 @@ class UserCrudController extends CrudController
     public function setupListOperation()
     {
         $this->crud->removeButton("update");
-        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.User.edit',"beginning");
+        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->removeButton("delete");
-        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.User.delete');
+        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         $this->crud->addColumns([
             [
                 'name'  => 'name',

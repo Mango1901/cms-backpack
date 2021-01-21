@@ -6,10 +6,10 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PostHasTags extends Model
+class CateAble extends Model
 {
     use HasFactory,CrudTrait;
     public $timestamps = true;
-    protected $primaryKey=["tagable_id","tag_id","tagable_type"];
-    protected $table="post_has_tags";
+    protected $primaryKey=["cateable_id","category_id","cateable_type"];
+    protected $table="cateable";
 }

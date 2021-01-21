@@ -13,14 +13,14 @@ class CreatePostHasCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_has_categories', function (Blueprint $table) {
-            $table->bigInteger("able_id");
-            $table->String("able_type");
+        Schema::create('cateable', function (Blueprint $table) {
+            $table->bigInteger("cateable_id");
+            $table->String("cateable_type");
             $table->bigInteger("category_id")->unsigned();
             $table->timestamps();
         });
-        Schema::table('post_has_categories', function (Blueprint $table) {
-            $table->primary(['able_id', 'category_id',"able_type"]);
+        Schema::table('cateable', function (Blueprint $table) {
+            $table->primary(['cateable_id', 'category_id',"cateable_type"]);
         });
     }
 

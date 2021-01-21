@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\Post;
-use App\Models\PostHasCategories;
-use App\Models\PostHasTags;
+use App\Models\CateAble;
+use App\Models\Taggable;
 use App\Models\Tag;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -51,9 +51,9 @@ class PostCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->removeButton("update");
-                $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.Post.edit',"beginning");
+                $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->removeButton("delete");
-                $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
+                $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn('title');
         CRUD::addColumn([
             "name"=>"description",
@@ -116,9 +116,9 @@ class PostCrudController extends CrudController
     }
     public function setupShowOperation(){
         $this->crud->removeButton("update");
-        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.Post.edit',"beginning");
+        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->removeButton("delete");
-        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.Post.delete');
+        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn('title');
         CRUD::addColumn([
             "name"=>"user_id",
