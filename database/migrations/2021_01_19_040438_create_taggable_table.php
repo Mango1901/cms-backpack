@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostHasTagsTable extends Migration
+class CreateTaggableTable extends Migration
 {
     /**
      * Run the migrations.
@@ -31,6 +31,6 @@ class CreatePostHasTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_has_tags');
+        Schema::dropIfExists('taggable');
     }
 }

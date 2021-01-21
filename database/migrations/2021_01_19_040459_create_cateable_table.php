@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostHasCategoriesTable extends Migration
+class CreateCateAbleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -31,6 +31,6 @@ class CreatePostHasCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_has_categories');
+        Schema::dropIfExists('cateable');
     }
 }
