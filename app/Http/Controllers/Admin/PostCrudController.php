@@ -176,6 +176,7 @@ class PostCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        CRUD::setValidation(PostRequest::class);
         $this->crud->addFields([
                 [
                     'label'     => "Category",
