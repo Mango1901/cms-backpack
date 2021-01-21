@@ -90,6 +90,43 @@ class PostCrudController extends CrudController
             'height' => '150px',
             'width'  => '130px'
         ]);
+        $this->crud->addFilter(
+            [
+                'name'  => 'category',
+                'type'  => 'dropdown',
+                'label' => "Category"
+            ],
+            Category::all()->pluck('name', 'id')->toArray(),
+            function ($value) { // if the filter is active
+                $this->crud->addClause('whereHas', 'category', function ($query) use ($value) {
+                    $query->where('category_id', '=', $value);
+                });
+            }
+        );
+        $this->crud->addFilter(
+            [
+                'name'  => 'tag',
+                'type'  => 'dropdown',
+                'label' => "Tag"
+            ],
+            Tag::all()->pluck('name', 'id')->toArray(),
+            function ($value) { // if the filter is active
+                $this->crud->addClause('whereHas', 'tag', function ($query) use ($value) {
+                    $query->where('tag_id', '=', $value);
+                });
+            }
+        );
+        $this->crud->addFilter([
+            'type'  => 'date_range',
+            'name'  => 'created_at',
+            'label' => 'Date range'
+        ],
+            false,
+            function ($value) { // if the filter is active, apply these constraints
+                // $dates = json_decode($value);
+                // $this->crud->addClause('where', 'date', '>=', $dates->from);
+                // $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
+            });
         $this->crud->addColumns([
             [ // n-n relationship (with pivot table)
                 'label'     => "Category", // Table column heading
@@ -110,7 +147,6 @@ class PostCrudController extends CrudController
         ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
-
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -242,6 +278,12 @@ class PostCrudController extends CrudController
                     }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     'wrapper' => ['class' => 'form-group col-md-4'],
                 ],
+        ]);
+        $this->crud->addField([
+            "label"=>"Disk",
+            "name"=>"disk",
+            "type"=>"hidden",
+            "value"=>"uploads",
         ]);
         CRUD::addField([
             "name"=>"title",
