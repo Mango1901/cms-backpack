@@ -43,7 +43,7 @@ return [
         ],
         'uploads' => [
             'driver' => 'local',
-            'root' => public_path("storage"),
+            'root' => storage_path("app/public"),
             // 'url' => '/photos/',
             // 'visibility' => 'public',
         ],
