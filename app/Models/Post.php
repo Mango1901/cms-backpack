@@ -18,7 +18,7 @@ class Post extends Model
         return $this->morphToMany(
             Category::class,
             'cateable',
-            CateAble::class,
+            "cateable",
             "cateable_id",
             'category_id'
         );
@@ -31,7 +31,7 @@ class Post extends Model
         return $this->morphToMany(
             Tag::class,
             'taggable',
-            Taggable::class,
+            "taggable",
            "taggable_id",
             'tag_id'
         );
