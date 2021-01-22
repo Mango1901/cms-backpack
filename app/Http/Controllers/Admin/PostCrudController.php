@@ -84,7 +84,7 @@ class PostCrudController extends CrudController
             'name' => 'image', // The db column name
             'label' => "Post Image", // Table column heading
             'type' => 'image',
-            "disk"         =>"uploads",
+            "disk"         =>env("DISK_NAME"),
             "upload"       =>true,
             'height' => '150px',
             'width'  => '130px'
@@ -275,7 +275,7 @@ class PostCrudController extends CrudController
             "label"=>"Disk",
             "name"=>"disk",
             "type"=>"hidden",
-            "value"=>"uploads",
+            "value"=>env("DISK_NAME"),
         ]);
         CRUD::addField([
             "name"=>"title",
