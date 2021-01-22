@@ -84,7 +84,7 @@ class PostCrudController extends CrudController
             'name' => 'image', // The db column name
             'label' => "Post Image", // Table column heading
             'type' => 'image',
-            "disk"         =>env("DISK_NAME"),
+            "disk"         =>config("save_disk.storage_disk"),
             "upload"       =>true,
             'height' => '150px',
             'width'  => '130px'
@@ -196,7 +196,7 @@ class PostCrudController extends CrudController
             'label'     => 'Post image', // Table column heading
             'type'      => 'image',
             // image from a different disk (like s3 bucket)
-             'disk'   => env("DISK_NAME"),
+             'disk'   => config("save_disk.storage_disk"),
             // optional width/height if 25px is not ok with you
              'height' => '150px',
              'width'  => '130px'
@@ -275,7 +275,7 @@ class PostCrudController extends CrudController
             "label"=>"Disk",
             "name"=>"disk",
             "type"=>"hidden",
-            "value"=>env("DISK_NAME"),
+            "value"=>config("save_disk.storage_disk"),
         ]);
         CRUD::addField([
             "name"=>"title",
