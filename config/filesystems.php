@@ -40,7 +40,13 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
-        env('DISK_NAME', 'uploads') => [
+        "uploads" => [
+            'driver' => 'local',
+            'root' => storage_path("app/public"),
+            // 'url' => '/photos/',
+            // 'visibility' => 'public',
+        ],
+        "abc"=> [
             'driver' => 'local',
             'root' => storage_path("app/public"),
             // 'url' => '/photos/',

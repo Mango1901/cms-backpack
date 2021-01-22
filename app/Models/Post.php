@@ -42,7 +42,7 @@ class Post extends Model
     public function setImageAttribute($value)
     {
         $attribute_name = "image";
-        $disk = "uploads";
+        $disk = config("save_disk.storage_disk");
         $destination_path = "/";
         if ($value==null) {
             // delete the image from disk

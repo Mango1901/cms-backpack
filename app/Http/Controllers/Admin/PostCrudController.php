@@ -296,7 +296,7 @@ class PostCrudController extends CrudController
             'name'         => "image",
             'filename'     => "image_filename", // set to null if not needed
             'type'         => 'upload',
-            "disk"         =>"uploads",
+            "disk"         =>config("save_disk.storage_disk"),
             "upload"       =>true,
             'aspect_ratio' => 1, // set to 0 to allow any aspect ratio
             'crop'         => true, // set to true to allow cropping, false to disable
