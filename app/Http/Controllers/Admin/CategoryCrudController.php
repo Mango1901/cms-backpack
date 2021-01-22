@@ -31,9 +31,7 @@ class CategoryCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        $this->crud->removeButton("update");
-             $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
-        $this->crud->removeButton("delete");
+             $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit',"beginning");
              $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn('name');
         CRUD::addColumn('slug');
@@ -41,9 +39,7 @@ class CategoryCrudController extends CrudController
     }
     protected function setupShowOperation()
     {
-        $this->crud->removeButton("update");
-        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
-        $this->crud->removeButton("delete");
+        $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         $this->setupListOperation();
         CRUD::addColumn([

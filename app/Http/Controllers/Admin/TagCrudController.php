@@ -30,9 +30,7 @@ class TagCrudController extends CrudController
         }
     }
     protected function setupListOperation(){
-        $this->crud->removeButton("update");
-            $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
-        $this->crud->removeButton("delete");
+            $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit',"beginning");
             $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn([
             "name"=>"user_id",
@@ -53,9 +51,7 @@ class TagCrudController extends CrudController
         CRUD::addColumn('updated_at');
     }
     protected function setupShowOperation(){
-        $this->crud->removeButton("update");
-        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
-        $this->crud->removeButton("delete");
+        $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         $this->setupListOperation();
 

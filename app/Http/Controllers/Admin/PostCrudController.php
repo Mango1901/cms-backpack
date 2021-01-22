@@ -49,9 +49,7 @@ class PostCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->removeButton("update");
-                $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
-        $this->crud->removeButton("delete");
+                $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit');
                 $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn('title');
         CRUD::addColumn([
@@ -84,7 +82,7 @@ class PostCrudController extends CrudController
             'name' => 'image', // The db column name
             'label' => "Post Image", // Table column heading
             'type' => 'image',
-            "disk"         =>config("save_disk.storage_disk"),
+            "disk"         => $this->crud->getCurrentEntry(),
             "upload"       =>true,
             'height' => '150px',
             'width'  => '130px'
@@ -147,9 +145,7 @@ class PostCrudController extends CrudController
          */
     }
     public function setupShowOperation(){
-        $this->crud->removeButton("update");
-        $this->crud->addButton('line', 'edit', 'view', 'crud::buttons.edit',"beginning");
-        $this->crud->removeButton("delete");
+        $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn('title');
         CRUD::addColumn([
@@ -183,6 +179,15 @@ class PostCrudController extends CrudController
                 'model'     => Tag::class, // foreign key model
             ],
         ]);
+        $this->crud->addColumn([
+            'name' => 'image', // The db column name
+            'label' => "Post Image", // Table column heading
+            'type' => 'image',
+            "disk"         => $this->crud->getCurrentEntry()->disk,
+            "upload"       =>true,
+            'height' => '150px',
+            'width'  => '130px'
+        ]);
         CRUD::addColumn([
             'name'         => 'format_id', // name of relationship method in the model
             'type'         => 'select',
@@ -190,17 +195,6 @@ class PostCrudController extends CrudController
             'entity' => "Format",
             'attribute' =>'name',
             'model' => "App\Models\Format",
-        ]);
-        $this->crud->addColumn([
-            'name'      => 'image', // The db column name
-            'label'     => 'Post image', // Table column heading
-            'type'      => 'image',
-            // image from a different disk (like s3 bucket)
-             'disk'   => config("save_disk.storage_disk"),
-            // optional width/height if 25px is not ok with you
-             'height' => '150px',
-             'width'  => '130px'
-
         ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
