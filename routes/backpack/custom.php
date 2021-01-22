@@ -15,6 +15,8 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
+    Route::get('posts/ajax-category-options', 'PostCrudController@categoryOptions');
+    Route::get('posts/ajax-tag-options', 'PostCrudController@tagOptions');
     Route::crud('permission', 'PermissionCrudController');
     Route::crud('role', 'RoleCrudController');
     Route::crud('user', 'UserCrudController');

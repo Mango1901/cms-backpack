@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\Post;
-use App\Models\CateAble;
-use App\Models\Taggable;
 use App\Models\Tag;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Http\Request;
 
 /**
  * Class PostCrudController
@@ -93,29 +92,22 @@ class PostCrudController extends CrudController
         $this->crud->addFilter(
             [
                 'name'  => 'category',
-                'type'  => 'dropdown',
-                'label' => "Category"
+                'type'  => 'select2_ajax',
+                'label' => "Category",
+                'placeholder' => 'Pick a category'
             ],
-            Category::all()->pluck('name', 'id')->toArray(),
-            function ($value) { // if the filter is active
-                $this->crud->addClause('whereHas', 'category', function ($query) use ($value) {
-                    $query->where('category_id', '=', $value);
-                });
-            }
-        );
-        $this->crud->addFilter(
-            [
-                'name'  => 'tag',
-                'type'  => 'dropdown',
-                'label' => "Tag"
-            ],
-            Tag::all()->pluck('name', 'id')->toArray(),
-            function ($value) { // if the filter is active
-                $this->crud->addClause('whereHas', 'tag', function ($query) use ($value) {
-                    $query->where('tag_id', '=', $value);
-                });
-            }
-        );
+            url('admin/posts/ajax-category-options'), // the ajax route
+            function ($value){
+                // if the filter is active
+            });
+        $this->crud->addFilter([
+            'name'        => 'tag',
+            'type'        => 'select2_ajax',
+            'label'       => 'Tag',
+            'placeholder' => 'Pick a tag'
+        ],
+            url('admin/posts/ajax-tag-options') // the ajax route
+          );
         $this->crud->addFilter([
             'type'  => 'date_range',
             'name'  => 'created_at',
@@ -366,5 +358,14 @@ class PostCrudController extends CrudController
     {
         return $this->fetch(\App\Models\Tag::class);
     }
-
+    public function tagOptions(Request $request) {
+        $term = $request->input('term');
+        $options = Tag::where('name', 'like', '%'.$term.'%')->get()->pluck('name', 'id');
+        return $options;
+    }
+    public function categoryOptions(Request $request){
+        $term = $request->input('term');
+        $options = Category::where('name', 'like', '%'.$term.'%')->get()->pluck('name', 'id');
+        return $options;
+    }
 }
