@@ -196,7 +196,7 @@ class PostCrudController extends CrudController
             'label'     => 'Post image', // Table column heading
             'type'      => 'image',
             // image from a different disk (like s3 bucket)
-             'disk'   => 'uploads',
+             'disk'   => env("DISK_NAME"),
             // optional width/height if 25px is not ok with you
              'height' => '150px',
              'width'  => '130px'
