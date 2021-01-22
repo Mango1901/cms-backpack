@@ -95,16 +95,24 @@ class PostCrudController extends CrudController
                 'placeholder' => 'Pick a category'
             ],
             url('admin/posts/ajax-category-options'), // the ajax route
-            function ($value){
-                // if the filter is active
-            });
+            function ($value) { // if the filter is active
+                $this->crud->addClause('whereHas', 'category', function ($query) use ($value) {
+                    $query->where('category_id', '=', $value);
+                });
+            }
+            );
         $this->crud->addFilter([
             'name'        => 'tag',
             'type'        => 'select2_ajax',
             'label'       => 'Tag',
             'placeholder' => 'Pick a tag'
         ],
-            url('admin/posts/ajax-tag-options') // the ajax route
+            url('admin/posts/ajax-tag-options'), // the ajax route
+               function ($value) { // if the filter is active
+                   $this->crud->addClause('whereHas', 'tag', function ($query) use ($value) {
+                       $query->where('tag_id', '=', $value);
+                   });
+               }
           );
         $this->crud->addFilter([
             'type'  => 'date_range',
