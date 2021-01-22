@@ -1,5 +1,5 @@
 <?php
 
 return [
-    "storage_disk"=>env("DISK_NAME","uploads"),
+    "post_thumb"=>env("DISK_NAME","uploads"),
 ];

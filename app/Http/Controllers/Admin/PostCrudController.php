@@ -277,7 +277,7 @@ class PostCrudController extends CrudController
             "label"=>"Disk",
             "name"=>"disk",
             "type"=>"hidden",
-            "value"=>config("save_disk.storage_disk"),
+            "value"=>config("save_disk.post_thumb"),
         ]);
         CRUD::addField([
             "name"=>"title",
@@ -304,7 +304,7 @@ class PostCrudController extends CrudController
             'name'         => "image",
             'filename'     => "image_filename", // set to null if not needed
             'type'         => 'upload',
-            "disk"         =>config("save_disk.storage_disk"),
+            "disk"         =>config("save_disk.post_thumb"),
             "upload"       =>true,
             'aspect_ratio' => 1, // set to 0 to allow any aspect ratio
             'crop'         => true, // set to true to allow cropping, false to disable
