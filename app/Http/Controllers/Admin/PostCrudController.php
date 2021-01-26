@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
+use App\Models\CustomFields;
 use App\Models\Post;
 use App\Models\Tag;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -19,6 +20,7 @@ class PostCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -143,6 +145,14 @@ class PostCrudController extends CrudController
                 'model'     => Tag::class, // foreign key model
             ],
         ]);
+        $this->crud->addColumn([
+                'label'     => "Custom Fields", // Table column heading
+                'type'      => 'relationship',
+                'name'      => 'CustomFields', // the method that defines the relationship in your Model
+                'entity'    => 'CustomFields', // the method that defines the relationship in your Model
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'model'     => CustomFields::class, // foreign key model
+        ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
 
@@ -186,6 +196,14 @@ class PostCrudController extends CrudController
                 'attribute' => 'name', // foreign key attribute that is shown to user
                 'model'     => Tag::class, // foreign key model
             ],
+        ]);
+        $this->crud->addColumn([
+            'label'     => "Custom Fields", // Table column heading
+            'type'      => 'relationship',
+            'name'      => 'CustomFields', // the method that defines the relationship in your Model
+            'entity'    => 'CustomFields', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'model'     => CustomFields::class, // foreign key model
         ]);
         $this->crud->addColumn([
             'name' => 'image', // The db column name
@@ -272,6 +290,25 @@ class PostCrudController extends CrudController
                     }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     'wrapper' => ['class' => 'form-group col-md-4'],
                 ],
+            [
+                'label'     => "Custom Fields",
+                'type'      => 'relationship',
+                'name'      => 'CustomFields', // the method that defines the relationship in your Model
+
+                // optional
+                'entity'    => 'CustomFields', // the method that defines the relationship in your Model
+                'model'     => CustomFields::class, // foreign key model
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+                'inline_create' => true,
+                'ajax' => true,
+
+                // also optional
+                'options'   => (function ($query) {
+                    return $query->orderBy('id', 'ASC')->get();
+                }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                'wrapper' => ['class' => 'form-group col-md-4'],
+            ],
         ]);
         $this->crud->addField([
             "label"=>"Disk",
@@ -360,6 +397,10 @@ class PostCrudController extends CrudController
     {
         return $this->fetch(\App\Models\Tag::class);
     }
+    public function fetchCustomFields()
+    {
+        return $this->fetch(\App\Models\CustomFields::class);
+    }
     public function tagOptions(Request $request) {
         $term = $request->input('term');
         $options = Tag::where('name', 'like', '%'.$term.'%')->get()->pluck('name', 'id');
@@ -368,6 +409,11 @@ class PostCrudController extends CrudController
     public function categoryOptions(Request $request){
         $term = $request->input('term');
         $options = Category::where('name', 'like', '%'.$term.'%')->get()->pluck('name', 'id');
+        return $options;
+    }
+    public function CustomFieldsOptions(Request $request){
+        $term = $request->input('term');
+        $options = CustomFields::where('name', 'like', '%'.$term.'%')->get()->pluck('name', 'id');
         return $options;
     }
 }

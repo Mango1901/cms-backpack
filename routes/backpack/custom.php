@@ -15,6 +15,7 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
+    Route::get('posts/ajax-custom-fields-options', 'PostCrudController@customFieldsOptions');
     Route::get('posts/ajax-category-options', 'PostCrudController@categoryOptions');
     Route::get('posts/ajax-tag-options', 'PostCrudController@tagOptions');
     Route::crud('permission', 'PermissionCrudController');
@@ -23,4 +24,5 @@ Route::group([
     Route::crud('category', 'CategoryCrudController');
     Route::crud('tag', 'TagCrudController');
     Route::crud('post', 'PostCrudController');
+    Route::crud('custom-fields', 'CustomFieldsCrudController');
 }); // this should be the absolute last line of this file

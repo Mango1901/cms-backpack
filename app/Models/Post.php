@@ -36,6 +36,16 @@ class Post extends Model
             'tag_id'
         );
     }
+    public function CustomFields()
+    {
+        return $this->morphToMany(
+            CustomFields::class,
+            'ctAble',
+            "custom_fields_able",
+            "ctAble_id",
+            'custom_id'
+        );
+    }
     public function Format(){
         return $this->belongsTo(Format::class,"format_id","id");
     }
@@ -53,4 +63,5 @@ class Post extends Model
         }
         $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
     }
+
 }
