@@ -11,7 +11,7 @@ class Post extends Model
     use HasFactory;
     protected $table="posts";
     protected $primaryKey = "id";
-    protected $fillable=["title","user_id","url","description","excerpt","image","status","format_id","allow_comments","disk"];
+    protected $fillable=["title","user_id","url","description","excerpt","image","status","format_id","allow_comments","disk","custom_fields"];
 
     public function category()
     {
@@ -34,16 +34,6 @@ class Post extends Model
             "taggable",
            "taggable_id",
             'tag_id'
-        );
-    }
-    public function CustomFields()
-    {
-        return $this->morphToMany(
-            CustomFields::class,
-            'ctAble',
-            "custom_fields_able",
-            "ctAble_id",
-            'custom_id'
         );
     }
     public function Format(){

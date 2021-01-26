@@ -43,12 +43,14 @@ return [
         "uploads" => [
             'driver' => 'local',
             'root' => storage_path("app/public"),
+            'url' => env('APP_URL').'/storage',
             // 'url' => '/photos/',
             // 'visibility' => 'public',
         ],
         "abc"=> [
             'driver' => 'local',
             'root' => storage_path("app/public/storage"),
+            'url' => env('APP_URL').'/storage/storage',
             // 'url' => '/photos/',
             // 'visibility' => 'public',
         ],

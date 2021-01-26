@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCustomFields extends Migration
+class CreateCustomFieldsForPosts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class AddCustomFields extends Migration
      */
     public function up()
     {
-        Schema::create('custom_fields', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger("user_id")->unsigned();
-            $table->String("name");
-            $table->String("content");
+        Schema::table('posts', function (Blueprint $table) {
+            $table->string("custom_fields");
         });
     }
 
@@ -28,6 +25,8 @@ class AddCustomFields extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('custom_fields');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropColumn("custom_fields");
+        });
     }
 }

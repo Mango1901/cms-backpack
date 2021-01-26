@@ -24,5 +24,4 @@ Route::group([
     Route::crud('category', 'CategoryCrudController');
     Route::crud('tag', 'TagCrudController');
     Route::crud('post', 'PostCrudController');
-    Route::crud('custom-fields', 'CustomFieldsCrudController');
 }); // this should be the absolute last line of this file
