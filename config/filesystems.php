@@ -45,14 +45,14 @@ return [
             'root' => storage_path("app/public"),
             'url' => env('APP_URL').'/storage',
             // 'url' => '/photos/',
-             'visibility' => 'public',
+//             'visibility' => 'public',
         ],
         "test"=> [
             'driver' => 'local',
             'root' => storage_path("app/storage"),
-            'url' => env('APP_URL').'/storage1',
+            'url' => env('APP_URL').'/images',
             // 'url' => '/photos/',
-             'visibility' => 'public',
+//             'visibility' => 'public',
         ],
 
         's3' => [
@@ -80,7 +80,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-        public_path('storage') => storage_path('app/storage'),
+        public_path('images') => storage_path('app/storage'),
     ],
 
 ];

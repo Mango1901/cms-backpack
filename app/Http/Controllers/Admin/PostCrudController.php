@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
-use App\Models\CustomFields;
 use App\Models\Post;
 use App\Models\Tag;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -145,7 +144,13 @@ class PostCrudController extends CrudController
                 'model'     => Tag::class, // foreign key model
             ],
         ]);
-        CRUD::addColumn('custom_fields');
+        $this->crud->addColumn(
+            [
+                'name'    => 'custom_fields',
+                'label'   => 'Custom Fields',
+                'type'    => 'array_count',
+            ]
+        );
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
 
@@ -159,7 +164,13 @@ class PostCrudController extends CrudController
         $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn('title');
-        CRUD::addColumn('custom_fields');
+        $this->crud->addColumn(
+            [
+                'name'    => 'custom_fields',
+                'label'   => 'Custom Fields',
+                'type'    => 'array_count',
+            ]
+        );
         CRUD::addColumn([
             "name"=>"user_id",
             'type'=> 'select',
@@ -195,7 +206,7 @@ class PostCrudController extends CrudController
             'name' => 'image', // The db column name
             'label' => "Post Image", // Table column heading
             'type' => 'image',
-            "disk"         => $this->crud->getCurrentEntry()->disk,
+            "disk"         =>$this->crud->getCurrentEntry()->disk,
             "upload"       =>true,
             'height' => '150px',
             'width'  => '130px'
@@ -288,11 +299,27 @@ class PostCrudController extends CrudController
             'type'  => 'text',
             "label"=>"title"
         ]);
-        CRUD::addField([
-            "name"=>"custom_fields",
-            'type'  => 'text',
-            "label"=>"Custom Fields"
-        ]);
+        $abc = CRUD::addField(
+            [   // repeatable
+                'name'  => 'custom_fields',
+                'label' => 'Testimonials',
+                'type'  => 'repeatable',
+                'fields' => [
+                    [
+                        'name'    => 'name',
+                        'type'    => 'text',
+                        'label'   => 'Name',
+                        'wrapper' => ['class' => 'form-group col-md-6'],
+                    ],
+                    [
+                        'name'    => 'content',
+                        'type'    => 'text',
+                        'label'   => 'Content',
+                        'wrapper' => ['class' => 'form-group col-md-6'],
+                    ]
+                ],
+            ]
+        );
         CRUD::addField([
             "name"=>"excerpt",
             'type'  => 'text',

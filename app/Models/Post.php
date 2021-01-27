@@ -12,7 +12,9 @@ class Post extends Model
     protected $table="posts";
     protected $primaryKey = "id";
     protected $fillable=["title","user_id","url","description","excerpt","image","status","format_id","allow_comments","disk","custom_fields"];
-
+    protected $casts = [
+        'custom_fields' => 'array',
+    ];
     public function category()
     {
         return $this->morphToMany(
