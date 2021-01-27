@@ -145,11 +145,16 @@ class PostCrudController extends CrudController
             ],
         ]);
         $this->crud->addColumn(
-            [
-                'name'    => 'custom_fields',
-                'label'   => 'Custom Fields',
-                'type'    => 'array_count',
-            ]
+                [
+                    'name'  => 'custom_fields',
+                    'label' => 'Custom Fields',
+                    'type'  => 'table',
+                    'columns' =>
+                        [
+                        'name'        => 'name',
+                        'content'        => 'content',
+                        ],
+                ]
         );
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
@@ -166,9 +171,14 @@ class PostCrudController extends CrudController
         CRUD::addColumn('title');
         $this->crud->addColumn(
             [
-                'name'    => 'custom_fields',
-                'label'   => 'Custom Fields',
-                'type'    => 'array_count',
+                'name'  => 'custom_fields',
+                'label' => 'Custom Fields',
+                'type'  => 'table',
+                'columns' =>
+                    [
+                        'name'        => 'name',
+                        'content'        => 'content',
+                    ],
             ]
         );
         CRUD::addColumn([
