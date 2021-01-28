@@ -54,6 +54,8 @@ class PostCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->enableExportButtons();
+        $this->crud->enableDetailsRow();
+        $this->crud->setDetailsRowView('vendor.backpack.crud.details_row.post');
                 $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit');
                 $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn([
