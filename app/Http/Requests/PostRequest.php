@@ -26,10 +26,10 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
-              'title' => 'required|min:1|max:255',
+              'title' => 'required|min:1|max:150',
               'description' => 'required|min:1|max:4271658',
-              'excerpt' => 'required|min:1|max:1000',
-              "url"=>'required|min:1|max:80',
+              'excerpt' => 'required|min:1|max:150',
+              "url"=>'required|min:1|max:150',
 
         ];
     }

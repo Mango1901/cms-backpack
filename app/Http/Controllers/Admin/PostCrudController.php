@@ -24,6 +24,7 @@ class PostCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -50,26 +51,14 @@ class PostCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+
                 $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit');
                 $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
-        CRUD::addColumn('title');
         CRUD::addColumn([
-            "name"=>"description",
-            "label"=>"Description",
-            "type"=>"textarea"
-        ]);
-        CRUD::addColumn([
-            "name"=>"excerpt",
-            "label"=>"Excerpt",
-            "type"=>"text"
-        ]);
-        CRUD::addColumn([
-            "name"=>"url",
-            "label"=>"Send TrackBacks",
+            "name"=>"title",
+            "label"=>"Title",
             "type"=>"text",
-            'href' => function ($crud, $column, $entry, $related_key) {
-                return ($entry->url);
-            },
+            "limit"=>30
         ]);
         CRUD::addColumn([
             'name'         => 'format_id', // name of relationship method in the model
@@ -156,6 +145,42 @@ class PostCrudController extends CrudController
                         ],
                 ]
         );
+        $this->crud->addColumns([
+            [
+                'name'  => 'status',
+                'label' => 'Status',
+                'type'  => 'boolean',
+                // optionally override the Yes/No texts
+                'options' => [1 => 'Published', 0 => 'Private'],
+                'wrapper' => [
+                    'element' => 'span',
+                    'class'   => function ($crud, $column, $entry, $related_key) {
+                        if ($column['text'] == 'Published') {
+                            return 'badge badge-success';
+                        }
+
+                        return 'badge badge-default';
+                    },
+                ],
+            ],
+            [
+                'name'  => 'allow_comments',
+                'label' => 'Allow Comments',
+                'type'  => 'boolean',
+                // optionally override the Yes/No texts
+                'options' => [1 => 'Yes', 0 => 'No'],
+                'wrapper' => [
+                    'element' => 'span',
+                    'class'   => function ($crud, $column, $entry, $related_key) {
+                        if ($column['text'] == 'Yes') {
+                            return 'badge badge-success';
+                        }
+
+                        return 'badge badge-default';
+                    },
+                ],
+            ]
+        ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
 
