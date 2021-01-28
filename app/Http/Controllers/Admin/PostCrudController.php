@@ -51,7 +51,6 @@ class PostCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
                 $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit');
                 $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn([
