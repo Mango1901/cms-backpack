@@ -115,5 +115,26 @@
       'content'      => 'At hh:00, all custom entries are deleted, all files, everything. This cleanup is necessary because developers like to joke with their test entries, and mess with stuff. But you know that :-) Go ahead - make a developer smile.' ,
       'close_button' => true, // show close button or not
     ];
+     $widgets['before_content'][] = [
+	  'type' => 'div',
+	  'class' => 'row',
+	  'content' => [ // widgets
+		  	[
+		        'type' => 'chart',
+		        'wrapperClass' => 'col-md-6',
+		        // 'class' => 'col-md-6',
+		        'controller' => \App\Http\Controllers\Admin\Charts\WeeklyUsersChartController::class,
+				'content' => [
+				    'header' => 'New Users Past 7 Days', // optional
+				    // 'body' => 'This chart should make it obvious how many new users have signed up in the past 7 days.<br><br>', // optional
+
+		    	]
+	    	],
+       ]
+     ]
 @endphp
+@section('content')
+    {{-- In case widgets have been added to a 'content' group, show those widgets. --}}
+    @include(backpack_view('inc.widgets'), [ 'widgets' => app('widgets')->where('group', 'content')->toArray() ])
+@endsection
 
