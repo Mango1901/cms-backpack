@@ -12,3 +12,5 @@ Add Post
 ![Screenshot from 2021-01-20 15-43-28](https://user-images.githubusercontent.com/72479838/105328461-a6057e80-5c02-11eb-8c26-f01b39bbe351.png)
 Post List 
 ![Screenshot from 2021-01-20 15-43-34](https://user-images.githubusercontent.com/72479838/105328415-98e88f80-5c02-11eb-83e2-0416c07f162f.png)
+Post button list 
+![Screenshot from 2021-01-28 16-48-23](https://user-images.githubusercontent.com/72479838/106120342-db711580-6188-11eb-8c05-dfd22efb4ea5.png)
