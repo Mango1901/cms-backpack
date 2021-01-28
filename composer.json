@@ -12,6 +12,7 @@
         "backpack/crud": "4.1.*",
         "backpack/filemanager": "^1.1",
         "backpack/permissionmanager": "^6.0",
+        "backpack/revise-operation": "^1.0",
         "consoletvs/charts": "6.*",
         "cviebrock/eloquent-sluggable": "^8.0",
         "fideloper/proxy": "^4.4",

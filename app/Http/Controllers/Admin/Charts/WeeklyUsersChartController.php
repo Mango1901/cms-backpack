@@ -26,7 +26,6 @@ class WeeklyUsersChartController extends ChartController
     /**
      * Respond to AJAX calls with all the chart data points.
      *
-     * @return json
      */
     public function data()
     {

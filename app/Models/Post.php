@@ -4,11 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 class Post extends Model
 {
     use \Backpack\CRUD\app\Models\Traits\CrudTrait;
+    use RevisionableTrait;
     use HasFactory;
+    protected $revisionEnabled = true;
+    protected $revisionCleanup = true;
+    protected $historyLimit = 500; //Stop tracking revisions after 500 changes have been made.
     protected $table="posts";
     protected $primaryKey = "id";
     protected $fillable=["title","user_id","url","description","excerpt","image","status","format_id","allow_comments","disk","custom_fields"];

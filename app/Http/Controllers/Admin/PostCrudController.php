@@ -25,6 +25,7 @@ class PostCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
+    use \Backpack\ReviseOperation\ReviseOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -36,6 +37,7 @@ class PostCrudController extends CrudController
         CRUD::setModel(\App\Models\Post::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/post');
         CRUD::setEntityNameStrings('post', 'posts');
+        $this->crud->allowAccess('revisions');
         if(backpack_user()->hasRole("User")){
             $this->crud->denyAccess("create");
             $this->crud->denyAccess("update");
@@ -51,6 +53,7 @@ class PostCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->enableExportButtons();
                 $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit');
                 $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn([
@@ -190,9 +193,10 @@ class PostCrudController extends CrudController
          */
     }
     public function setupShowOperation(){
+
         $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit',"beginning");
         $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
-        CRUD::addColumn('title');
+
         $this->crud->addColumn(
             [
                 'name'  => 'custom_fields',
@@ -205,6 +209,7 @@ class PostCrudController extends CrudController
                     ],
             ]
         );
+        CRUD::column('title')->makeFirst();
         CRUD::addColumn([
             "name"=>"user_id",
             'type'=> 'select',
