@@ -136,11 +136,20 @@
 				'content' => [
 				    'header' => 'New Users Past 7 Days', // optional
                  'body' => 'This chart should make it obvious how many new users have signed up in the past 7 days.<br><br>', // optional
-
 		    	]
 	    	],
+	    	[
+	    	    'type' => 'chart',
+		        'wrapperClass' => 'col-md-6',
+		        // 'class' => 'col-md-6',
+		        'controller' => \App\Http\Controllers\Admin\Charts\NewEntriesChartController::class,
+				'content' => [
+				    'header' => 'New Entries', // optional
+                 'body' => 'This chart should make it obvious how many things have changed in the past 30 days.<br><br>', // optional
+		    	]
+            ],
        ]
-     ]
+     ];
 @endphp
 @section('content')
     {{-- In case widgets have been added to a 'content' group, show those widgets. --}}

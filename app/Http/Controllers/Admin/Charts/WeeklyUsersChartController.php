@@ -16,7 +16,7 @@ class WeeklyUsersChartController extends ChartController
         $this->chart->labels(['6 days ago', '5 days ago', '4 days ago', '3 days ago', '2 days ago', 'Yesterday', 'Today']);
 
         // RECOMMENDED. Set URL that the ChartJS library should call, to get its data using AJAX.
-        $this->chart->load(backpack_url('charts/users'));
+        $this->chart->load(backpack_url('charts/weekly-users'));
 
         // OPTIONAL
         $this->chart->minimalist(false);

@@ -27,6 +27,7 @@ class PostCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
     use \Backpack\ReviseOperation\ReviseOperation;
 
+
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -43,6 +44,9 @@ class PostCrudController extends CrudController
             $this->crud->denyAccess("update");
             $this->crud->denyAccess("delete");
         }
+        if(!backpack_user()->hasRole("Admin")){
+            $this->crud->denyAccess("clone");
+        }
     }
 
     /**
@@ -53,7 +57,7 @@ class PostCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->enableExportButtons();
+        $this->crud->setActionsColumnPriority(10000);
                 $this->crud->addButton('line', 'update', 'view', 'crud::buttons.edit');
                 $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete');
         CRUD::addColumn([
@@ -177,7 +181,6 @@ class PostCrudController extends CrudController
                         if ($column['text'] == 'Yes') {
                             return 'badge badge-success';
                         }
-
                         return 'badge badge-default';
                     },
                 ],
@@ -193,6 +196,8 @@ class PostCrudController extends CrudController
          */
         $this->crud->enableDetailsRow();
         $this->crud->setDetailsRowView('vendor.backpack.crud.details_row.post');
+        $this->crud->enableExportButtons();
+        $this->crud->addButtonFromModelFunction('line', 'open_google', 'openGoogle', 'beginning');
     }
     public function setupShowOperation(){
 
@@ -272,6 +277,7 @@ class PostCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->crud->setCreateContentClass('col-md-12 col-md-offset-2');
         CRUD::setValidation(PostRequest::class);
         $this->crud->addFields([
                 [
@@ -291,6 +297,7 @@ class PostCrudController extends CrudController
                     'options'   => (function ($query) {
                         return $query->orderBy('id', 'ASC')->get();
                     }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                    'data_source'       => backpack_url('post/fetch/category'),
                     'wrapper' => ['class' => 'form-group col-md-4'],
                 ],
                 [
@@ -327,6 +334,7 @@ class PostCrudController extends CrudController
                         return $query->orderBy('id', 'ASC')->get();
                     }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     'wrapper' => ['class' => 'form-group col-md-4'],
+                    'data_source'       => backpack_url('post/fetch/tag'),
                 ],
         ]);
         $this->crud->addField([
@@ -423,6 +431,7 @@ class PostCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->crud->setEditContentClass("col-md-12 col-md-offset-2");
         $post = Post::where("id",$this->crud->getCurrentEntryId())->first();
         if(!backpack_user()->can("update",$post)){
             abort(403);

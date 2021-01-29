@@ -43,6 +43,10 @@ class Post extends Model
             'tag_id'
         );
     }
+    public function openGoogle($crud = false)
+    {
+        return '<a class="btn btn-sm btn-link" target="_blank" href="http://google.com?q='.urlencode($this->title).'" data-toggle="tooltip" title="Just a demo custom button."><i class="la la-search"></i> Google it</a>';
+    }
     public function Format(){
         return $this->belongsTo(Format::class,"format_id","id");
     }

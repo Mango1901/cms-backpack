@@ -15,6 +15,7 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
+    Route::get('charts/weekly-users', 'Charts\WeeklyUsersChartController@response')->name('charts.weekly-users.index');
     Route::get('posts/ajax-custom-fields-options', 'PostCrudController@customFieldsOptions');
     Route::get('posts/ajax-category-options', 'PostCrudController@categoryOptions');
     Route::get('posts/ajax-tag-options', 'PostCrudController@tagOptions');
@@ -24,5 +25,5 @@ Route::group([
     Route::crud('category', 'CategoryCrudController');
     Route::crud('tag', 'TagCrudController');
     Route::crud('post', 'PostCrudController');
-    Route::get('charts/wekkly-users', 'Charts\WekklyUsersChartController@response')->name('charts.wekkly-users.index');
+    Route::get('charts/new-entries', 'Charts\NewEntriesChartController@response')->name('charts.new-entries.index');
 }); // this should be the absolute last line of this file
