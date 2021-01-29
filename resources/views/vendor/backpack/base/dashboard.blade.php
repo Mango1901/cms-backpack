@@ -36,9 +36,11 @@
     $productCount = App\Models\Post::count();
     $userCount = App\Models\User::count();
     $categoryCount = App\Models\Category::count();
-    $lastCategory = App\Models\Category::orderBy('created_at', 'DESC')->first();
-    $lastCategoryDaysAgo = \Carbon\Carbon::parse($lastCategory->created_at)->diffInDays(\Carbon\Carbon::today());
-
+    $lastCategory = NULL;$lastCategoryDaysAgo="0";
+    if((App\Models\Category::all()) == NULL){
+         $lastCategory = App\Models\Category::orderBy('created_at', 'DESC')->first();
+        $lastCategoryDaysAgo = \Carbon\Carbon::parse($lastCategory->created_at)->diffInDays(\Carbon\Carbon::today());
+    }
      // notice we use Widget::add() to add widgets to a certain group
     Widget::add()->to('before_content')->type('div')->class('row')->content([
         // notice we use Widget::make() to add widgets as content (not in a group)
@@ -68,7 +70,7 @@
             ->class('card border-0 text-white bg-warning')
             ->value($lastCategoryDaysAgo.' days')
             ->progressClass('progress-bar')
-            ->description('Since last article.')
+            ->description('Since last Category.')
             ->progress(30)
             ->hint('Post an article every 3-4 days.'),
         // both Widget::make() and Widget::add() accept an array as a parameter
