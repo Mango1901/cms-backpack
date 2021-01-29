@@ -17,6 +17,9 @@ When uploads image to server, please run:
 
 php artisan storage:link to generate url
 
+custom dashboard:
+
+
 
 
 
