@@ -73,12 +73,20 @@ class PostCrudController extends CrudController
             "limit"=>30
         ]);
         CRUD::addColumn([
-            'name'         => 'format_id', // name of relationship method in the model
-            'type'         => 'select',
-            'label'        => 'Format',
-            'entity' => "Format",
-            'attribute' =>'name',
-            'model' => "App\Models\Format",
+            'name'  => 'format_id',
+            'label' => 'Format',
+            'type'  => 'radio',
+            // optionally override the Yes/No texts
+            'options' => [
+                1 => "Standard",
+                2 => "Aside",
+                3 => "Image",
+                4 => "Video",
+                5 => "Audio",
+                6 => "Quote",
+                7 => "Link",
+                8 => "Gallery",
+            ]
         ]);
         $this->crud->addColumn([
             'name' => 'image', // The db column name
@@ -306,12 +314,20 @@ class PostCrudController extends CrudController
             'width'  => '130px'
         ]);
         CRUD::addColumn([
-            'name'         => 'format_id', // name of relationship method in the model
-            'type'         => 'select',
-            'label'        => 'Format',
-            'entity' => "Format",
-            'attribute' =>'name',
-            'model' => "App\Models\Format",
+                'name'  => 'format_id',
+                'label' => 'Format',
+                'type'  => 'radio',
+                // optionally override the Yes/No texts
+                'options' => [
+                    1 => "Standard",
+                    2 => "Aside",
+                    3 => "Image",
+                    4 => "Video",
+                    5 => "Audio",
+                    6 => "Quote",
+                    7 => "Link",
+                    8 => "Gallery"
+                ],
         ]);
         CRUD::addColumn('created_at');
         CRUD::addColumn('updated_at');
@@ -350,18 +366,21 @@ class PostCrudController extends CrudController
                 ],
                 [
                     'label'     => "Format",
-                    'type'      => 'select',
-                    'name'      => 'format_id', // the db column for the foreign key
-
-                    // optional
-                    'entity'    => 'Format', // the method that defines the relationship in your Model
-                    'model'     => "\App\Models\Format", // foreign key model
-                    'attribute' => 'name', // foreign key attribute that is shown to user
-                    'default'   => 1, // set the default value of the select2
+                    'type'      => 'radio',
+                    'name'      => 'format_id',
+                    'default'   => 1,
                     // also optional
-                    'options'   => (function ($query) {
-                        return $query->orderBy('id', 'ASC')->get();
-                    }),
+                    'options'     => [
+                        // the key will be stored in the db, the value will be shown as label;
+                        1 => "Standard",
+                        2 => "Aside",
+                        3 => "Image",
+                        4 => "Video",
+                        5 => "Audio",
+                        6 => "Quote",
+                        7 => "Link",
+                        8 => "Gallery"
+                    ],
                     'wrapper' => ['class' => 'form-group col-md-4'],
                 ],
                 [
