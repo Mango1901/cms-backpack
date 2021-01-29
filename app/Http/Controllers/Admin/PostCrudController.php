@@ -7,9 +7,10 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 /**
  * Class PostCrudController
  * @package App\Http\Controllers\Admin
@@ -24,8 +25,11 @@ class PostCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
+    use CloneOperation;
     use \Backpack\ReviseOperation\ReviseOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\BulkCloneOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
+
 
 
     /**
@@ -46,6 +50,8 @@ class PostCrudController extends CrudController
         }
         if(!backpack_user()->hasRole("Admin")){
             $this->crud->denyAccess("clone");
+            $this->crud->denyAccess("bulkClone");
+            $this->crud->denyAccess("bulkDelete");
         }
     }
 
@@ -121,6 +127,26 @@ class PostCrudController extends CrudController
                  $this->crud->addClause('where', 'created_at', '>=', $dates->from);
                  $this->crud->addClause('where', 'created_at', '<=', $dates->to . ' 23:59:59');
             });
+            $this->crud->addFilter([
+                'name'  => 'status',
+                'type'  => 'dropdown',
+                'label' => 'Status'
+            ], [
+                0 => 'Private',
+                1 => 'Published'
+            ], function($value) { // if the filter is active
+                 $this->crud->addClause('where', 'status', $value);
+            });
+        $this->crud->addFilter([
+            'name'  => 'allow_comments',
+            'type'  => 'dropdown',
+            'label' => 'Allow Comments'
+        ], [
+            0 => 'No',
+            1 => 'Yes'
+        ], function($value) { // if the filter is active
+            $this->crud->addClause('where', 'allow_comments', $value);
+        });
         $this->crud->addColumns([
             [ // n-n relationship (with pivot table)
                 'label'     => "Category", // Table column heading
@@ -186,9 +212,20 @@ class PostCrudController extends CrudController
                 ],
             ]
         ]);
-        CRUD::addColumn('created_at');
-        CRUD::addColumn('updated_at');
-
+        CRUD::addColumn([
+                'name'     => 'created_at',
+                'label'    => 'Created At',
+                'type'     => 'closure',
+                'function' => function($entry) {
+                    return '<h3>Created on</h3> '.$entry->created_at;
+                }
+        ]);
+        CRUD::addColumn([
+            'name'  => 'updated_at', // The db column name
+            'label' => 'Updated At', // Table column heading
+            'type'  => 'datetime',
+             'format' => 'Y-M-D H:m:s', // use something else than the base.default_datetime_format config value
+        ]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -217,6 +254,17 @@ class PostCrudController extends CrudController
             ]
         );
         CRUD::column('title')->makeFirst();
+        $this->crud->addColumn([
+            'name'  => 'description', // The db column name
+            'label' => 'Description', // Table column heading
+            'type'  => 'markdown',
+        ]);
+        $this->crud->addColumn([
+            'name'  => 'url',
+            'label' => 'Send TrackBacks', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getSlugWithLink',
+        ]);
         CRUD::addColumn([
             "name"=>"user_id",
             'type'=> 'select',
@@ -252,8 +300,8 @@ class PostCrudController extends CrudController
             'name' => 'image', // The db column name
             'label' => "Post Image", // Table column heading
             'type' => 'image',
-            "disk"         =>$this->crud->getCurrentEntry()->disk,
-            "upload"       =>true,
+            "disk" =>$this->crud->getCurrentEntry()->disk,
+            "upload" =>true,
             'height' => '150px',
             'width'  => '130px'
         ]);

@@ -64,5 +64,15 @@ class Post extends Model
         }
         $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
     }
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function($obj) {
+            \Storage::disk(config("save_disk.post_thumb"))->delete($obj->image);
+        });
+    }
+    public function getSlugWithLink(){
+        return '<a target="_blank" href="http://google.com?q='.urlencode(($this->url)).'" data-toggle="tooltip">'.$this->url.'</a>';
+    }
 
 }
