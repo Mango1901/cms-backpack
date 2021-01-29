@@ -489,7 +489,9 @@ class PostCrudController extends CrudController
          * - CRUD::field('price')->type('number');
          * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
+
     }
+
     /**
      * Define what happens when the Update operation is loaded.
      *
@@ -504,6 +506,39 @@ class PostCrudController extends CrudController
             abort(403);
         }
         $this->setupCreateOperation();
+        $this->crud->addSaveActions([
+            [
+                'name' => 'Edit and Back',
+                'visible' => function($crud) {
+                    return true;
+                },
+                'redirect' => function($crud, $request, $itemId) {
+                    return $crud->route;
+                },
+            ],
+            [
+                'name' => 'Edit and Back',
+                'visible' => function($crud) {
+                    return true;
+                },
+                'redirect' => function($crud, $request, $itemId) {
+                    \Alert::add('success', '<strong>Got it</strong><br>This is HTML in a green bubble.');
+                    return $crud->route;
+                },
+            ],
+        ]);
+        $this->crud->replaceSaveActions(
+            [
+                'name' => 'Edit and Back',
+                'visible' => function($crud) {
+                    return true;
+                },
+                'redirect' => function($crud, $request, $itemId) {
+
+                    return $crud->route;
+                },
+            ]
+        );
     }
     public function fetchCategory()
     {

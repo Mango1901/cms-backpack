@@ -20,7 +20,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",
         "laravel/framework": "^8.12",
-        "laravel/tinker": "^2.5"
+        "laravel/tinker": "^2.5",
+        "prologue/alerts": "^0.4.8"
     },
     "require-dev": {
         "backpack/generators": "^3.1",
