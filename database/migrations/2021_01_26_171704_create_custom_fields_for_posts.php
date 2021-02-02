@@ -14,7 +14,7 @@ class CreateCustomFieldsForPosts extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->string("custom_fields");
+            $table->longText("custom_fields");
         });
     }
 

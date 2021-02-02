@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use ElasticScoutDriverPlus\CustomSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use Venturecraft\Revisionable\RevisionableTrait;
 
 class Post extends Model
@@ -11,6 +13,9 @@ class Post extends Model
     use \Backpack\CRUD\app\Models\Traits\CrudTrait;
     use RevisionableTrait;
     use HasFactory;
+    use Searchable;
+    use CustomSearch;
+
     protected $revisionEnabled = true;
     protected $revisionCleanup = true;
     protected $historyLimit = 500; //Stop tracking revisions after 500 changes have been made.
@@ -20,6 +25,10 @@ class Post extends Model
     protected $casts = [
         'custom_fields' => 'array',
     ];
+    public function searchableAs()
+    {
+        return 'posts_index';
+    }
     public function category()
     {
         return $this->morphToMany(
@@ -71,5 +80,6 @@ class Post extends Model
     public function getSlugWithLink(){
         return '<a target="_blank" href="http://google.com?q='.urlencode(($this->url)).'" data-toggle="tooltip">'.$this->url.'</a>';
     }
+
 
 }
