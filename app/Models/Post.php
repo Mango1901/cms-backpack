@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use ElasticScoutDriverPlus\CustomSearch;
+use App\PostIndexConfigurator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
+use ScoutElastic\Searchable;
 use Venturecraft\Revisionable\RevisionableTrait;
 
 class Post extends Model
@@ -14,21 +14,33 @@ class Post extends Model
     use RevisionableTrait;
     use HasFactory;
     use Searchable;
-    use CustomSearch;
+    protected $indexConfigurator = PostIndexConfigurator::class;
 
     protected $revisionEnabled = true;
     protected $revisionCleanup = true;
     protected $historyLimit = 500; //Stop tracking revisions after 500 changes have been made.
     protected $table="posts";
     protected $primaryKey = "id";
-    protected $fillable=["title","user_id","url","description","excerpt","image","status","format_id","allow_comments","disk","custom_fields"];
+   protected $guarded = ["id"];
     protected $casts = [
         'custom_fields' => 'array',
     ];
-    public function searchableAs()
-    {
-        return 'posts_index';
-    }
+    protected $searchRules = [
+        //
+    ];
+    protected $mapping = [
+        'properties' => [
+            'title' => [
+                'type' => 'text',
+                // Also you can configure multi-fields, more details you can find here https://www.elastic.co/guide/en/elasticsearch/reference/current/multi-fields.html
+                'fields' => [
+                    'raw' => [
+                        'type' => 'keyword',
+                    ]
+                ]
+            ],
+        ]
+    ];
     public function category()
     {
         return $this->morphToMany(
